@@ -1,0 +1,72 @@
+// *****************************************************************************
+//
+// *****************************************************************************
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'osgi'
+    apply plugin: 'maven'
+
+    version      = '1.0.0.SNAPSHOT'
+    group        = 'com.github.lburgazzoli'
+    ext.prefix   = 'lb-hazelcast-json'
+
+    repositories {
+        maven { url 'http://repo1.maven.org/maven2' }
+        maven { url 'http://repo2.maven.org/maven2' }
+        maven { url 'http://repo.springsource.org/release' }
+        maven { url 'http://repository.springsource.com/maven/bundles/release' }
+        maven { url 'http://repository.springsource.com/maven/bundles/external' }
+        maven { url 'https://oss.sonatype.org/content/repositories/releases' }
+        
+        mavenLocal()
+
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    }
+
+    dependencies {
+        compile 'org.apache.commons:commons-lang3:3.1'
+        compile 'commons-beanutils:commons-beanutils:1.8.3'
+        compile 'org.slf4j:slf4j-api:1.7.5'
+        compile 'org.slf4j:slf4j-ext:1.7.5'
+        compile 'org.slf4j:jul-to-slf4j:1.7.5'
+        compile 'org.slf4j:jcl-over-slf4j:1.7.5'
+        compile 'org.slf4j:slf4j-log4j12:1.7.5'
+        compile 'log4j:log4j:1.2.17'
+        compile 'com.google.guava:guava:15.0'
+        compile 'com.hazelcast:hazelcast:3.1.2'
+        compile 'com.fasterxml.jackson.core:jackson-core:2.3.0'
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.3.0'
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.0'
+        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.3.0'
+    }
+
+    [compileJava, compileTestJava]*.options*.compilerArgs = [
+        "-Xlint:unchecked",
+        "-Xlint:deprecation"
+    ]
+
+    jar {
+        baseName = "${project.prefix}-${project.name}"
+
+        manifest.attributes['Bundle-Description'     ] = "${project.prefix} :: ${project.name}"
+        manifest.attributes['Bundle-Name'            ] = "${project.prefix} :: ${project.name}"
+        manifest.attributes['Bundle-SymbolicName'    ] = "${project.prefix}-${project.name}"
+        manifest.attributes['Bundle-Version'         ] = project.version
+        manifest.attributes['Implementation-Title'   ] = "${project.prefix}-${project.name}-${project.version}"
+        manifest.attributes['Implementation-Version' ] = project.version
+        manifest.attributes['Implementation-Vendor'  ] = 'lb'
+
+        manifest.classesDir = new File("$buildDir/classes/main")
+        manifest.classpath  = project.runtimeClasspath
+    }
+}
+
+// *****************************************************************************
+//
+// *****************************************************************************
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.9'
+}
