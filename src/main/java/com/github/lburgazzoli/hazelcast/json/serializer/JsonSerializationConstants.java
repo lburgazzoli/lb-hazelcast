@@ -16,17 +16,10 @@
  */
 package com.github.lburgazzoli.hazelcast.json.serializer;
 
-import com.fasterxml.jackson.dataformat.smile.SmileFactory;
- 
 /**
  *
  */
-public class BinaryJsonSerializer<T> extends JsonSerializer<T> {
-
-    /**
-     * c-tor
-     */
-    public BinaryJsonSerializer(Class<T> type) {
-        super(type, JsonSerializationConstants.TYPEID_BINARY,new SmileFactory());
-    }
+public class JsonSerializationConstants {
+    public static final int TYPEID_PLAIN  = 100;
+    public static final int TYPEID_BINARY = 101;
 }
