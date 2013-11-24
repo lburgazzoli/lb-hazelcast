@@ -1,0 +1,2 @@
+include "hazelcast-json"
+include "hazelcast-json-examples"
