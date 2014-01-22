@@ -9,7 +9,6 @@ subprojects {
 
     version      = '1.0.0.SNAPSHOT'
     group        = 'com.github.lburgazzoli'
-    ext.prefix   = 'lb'
 
     repositories {
         maven { url 'http://repo1.maven.org/maven2' }
