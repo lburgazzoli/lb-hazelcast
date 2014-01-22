@@ -8,7 +8,7 @@ subprojects {
     apply plugin: 'maven'
 
     version      = '1.0.0.SNAPSHOT'
-    group        = 'com.github.lburgazzoli.hazelcast'
+    group        = 'com.github.lburgazzoli'
     ext.prefix   = 'lb'
 
     repositories {
@@ -34,11 +34,12 @@ subprojects {
         compile 'org.slf4j:slf4j-log4j12:1.7.5'
         compile 'log4j:log4j:1.2.17'
         compile 'com.google.guava:guava:15.0'
-        compile 'com.hazelcast:hazelcast:3.1.3'
-        compile 'com.fasterxml.jackson.core:jackson-core:2.3.0'
-        compile 'com.fasterxml.jackson.core:jackson-databind:2.3.0'
+        compile 'com.hazelcast:hazelcast:3.1.5'
+        compile 'com.fasterxml.jackson.core:jackson-core:2.3.&'
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.3.1'
         compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.0'
-        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.3.0'
+        compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.3.1'
+        compile 'com.fasterxml.jackson.module:jackson-module-afterburner:2.3.1'
         compile 'com.nebhale.jsonpath:jsonpath:1.2'
     }
 
@@ -48,13 +49,13 @@ subprojects {
     ]
 
     jar {
-        baseName = "${project.prefix}-${project.name}"
+        baseName = "${project.name}"
 
-        manifest.attributes['Bundle-Description'     ] = "${project.prefix} :: ${project.name}"
-        manifest.attributes['Bundle-Name'            ] = "${project.prefix} :: ${project.name}"
-        manifest.attributes['Bundle-SymbolicName'    ] = "${project.prefix}-${project.name}"
+        manifest.attributes['Bundle-Description'     ] = "lb :: ${project.name}"
+        manifest.attributes['Bundle-Name'            ] = "lb :: ${project.name}"
+        manifest.attributes['Bundle-SymbolicName'    ] = "${project.group}.${project.name}"
         manifest.attributes['Bundle-Version'         ] = project.version
-        manifest.attributes['Implementation-Title'   ] = "${project.prefix}-${project.name}-${project.version}"
+        manifest.attributes['Implementation-Title'   ] = "${project.group}-${project.name}-${project.version}"
         manifest.attributes['Implementation-Version' ] = project.version
         manifest.attributes['Implementation-Vendor'  ] = 'lb'
 
@@ -68,5 +69,5 @@ subprojects {
 // *****************************************************************************
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.9'
+    gradleVersion = '1.10'
 }
