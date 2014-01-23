@@ -20,6 +20,8 @@ import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.storage.DataRef;
 import com.hazelcast.storage.Storage;
 import net.openhft.lang.io.DirectStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -27,6 +29,8 @@ import java.util.Map;
  * @author lburgazzoli
  */
 public class OffHeapStorage implements Storage<DataRef> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapStorage.class);
+
     private final DirectStore m_store;
     private final Map<Integer,OffHeapDataRef> m_dataRefs;
 
@@ -47,6 +51,8 @@ public class OffHeapStorage implements Storage<DataRef> {
 
     @Override
     public DataRef put(int hash, Data data) {
+        LOGGER.debug("put {} -> <{}>",hash,data.getBuffer());
+
         OffHeapDataRef dataref = m_dataRefs.get(hash);
 
         if(dataref != null) {
@@ -58,6 +64,9 @@ public class OffHeapStorage implements Storage<DataRef> {
             dataref = new OffHeapDataRef(m_store,data);
         }
 
+        LOGGER.debug("put {} : bufferSize {}",hash,data.bufferSize());
+        LOGGER.debug("put {} : sliceSize  {}",hash,dataref.size());
+
         m_dataRefs.put(hash,dataref);
 
         return dataref;
@@ -65,17 +74,20 @@ public class OffHeapStorage implements Storage<DataRef> {
 
     @Override
     public Data get(int hash, DataRef ref) {
+        LOGGER.debug("get {} -> {}",hash,ref.size());
         return ((OffHeapDataRef)ref).asData();
     }
 
     @Override
     public void remove(int hash, DataRef ref) {
+        LOGGER.debug("remove {} -> {}",hash,ref.size());
         ((OffHeapDataRef)ref).destroy();
         m_dataRefs.remove(hash);
     }
 
     @Override
     public void destroy() {
+        LOGGER.debug("destroy");
         m_store.free();
     }
 }

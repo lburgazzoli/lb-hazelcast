@@ -39,8 +39,8 @@ public class OffHeapDataRef implements DataRef {
         m_type = data.getType();
         m_classDefinition = data.getClassDefinition();
 
-
         m_data = store.createSlice();
+        m_data.writeInt(data.bufferSize());
         m_data.write(data.getBuffer());
     }
 
@@ -68,7 +68,7 @@ public class OffHeapDataRef implements DataRef {
 
     @Override
     public int size() {
-        return (int)m_data.capacity();
+        return (int)m_data.position();
     }
 
     @Override
@@ -93,8 +93,12 @@ public class OffHeapDataRef implements DataRef {
      * @return
      */
     public Data asData() {
-        byte[] buffer = new byte[size()];
-        m_data.read(buffer);
+        m_data.position(0L);
+
+        int bufferSize = m_data.readInt();
+        byte[] buffer = new byte[bufferSize];
+        m_data.readFully(buffer);
+
 
         return ClassDefinitionSetter.setClassDefinition(m_classDefinition,new Data(m_type,buffer));
     }

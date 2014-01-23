@@ -53,12 +53,12 @@ public class OffHeapNodeInitializer extends DefaultNodeInitializer {
 
         if(StringUtils.isNotBlank(size)) {
             m_size = Long.parseLong(size);
-            LOGGER.debug("OffHeap size: ", m_size);
+            LOGGER.debug("OffHeap size: {}", m_size);
         }
 
         if(StringUtils.isNotBlank(lazy)) {
             m_lazyInit = StringUtils.equalsIgnoreCase("true",lazy);
-            LOGGER.debug("OffHeap lazy: ", m_lazyInit);
+            LOGGER.debug("OffHeap lazy: {}", m_lazyInit);
         }
     }
 

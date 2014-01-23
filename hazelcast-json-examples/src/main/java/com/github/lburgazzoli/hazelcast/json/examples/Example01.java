@@ -1,5 +1,4 @@
-/**
- *
+/*
  * Copyright 2013 lb
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +33,7 @@ import java.util.Random;
 /**
  *
  */
-public class Example01 {
+public final class Example01 {
     private static final Logger LOGGER = LoggerFactory.getLogger(Example01.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -125,6 +124,10 @@ public class Example01 {
         return Hazelcast.newHazelcastInstance(cfg);
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     private void run() throws Exception {
         IMap<String,JsonNode> m1 = newHzInstance().getMap("map.json");
         IMap<String,JsonNode> m2 = newHzInstance().getMap("map.json");;
