@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 lb
+ * Copyright 2014 lb
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.hazelcast.json.serializer;
+package com.hazelcast.nio.serialization;
 
 /**
+ * @author lburgazzoli
  *
+ * Taken from
+ * - https://github.com/jerrinot/hugecas
+ * - src/main/java/com/hazelcast/nio/serialization/ClassDefinitionSetter.java
  */
-public class PlainJsonSerializer<T> extends JsonSerializer<T> {
-
+public class ClassDefinitionSetter {
     /**
-     * c-tor
+     * @param definition
+     * @param data
      */
-    public PlainJsonSerializer(Class<T> type) {
-        super(type, JsonSerializationConstants.TYPEID_PLAIN);
+    public static Data setClassDefinition(ClassDefinition definition, Data data) {
+        data.classDefinition = definition;
+        return data;
     }
 }

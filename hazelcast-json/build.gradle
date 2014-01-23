@@ -1,0 +1,25 @@
+project.ext {
+    bundleImportPackages = [
+            '*'
+    ]
+
+    bundleExportPackages = [
+            "*"
+    ]
+}
+
+dependencies {
+    compile 'com.fasterxml.jackson.core:jackson-core:2.3.&'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.3.1'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.0'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.3.1'
+    compile 'com.fasterxml.jackson.module:jackson-module-afterburner:2.3.1'
+    compile 'com.nebhale.jsonpath:jsonpath:1.2'
+}
+
+jar {
+    manifest {
+        instruction 'Import-Package' , bundleImportPackages.join(',')
+        instruction 'Export-Package' , bundleExportPackages.join(',')
+    }
+}
