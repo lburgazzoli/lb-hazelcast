@@ -1,4 +1,4 @@
-lb-hazelcast-json
+lb-hazelcast
 =================
 - json
 - offheap
