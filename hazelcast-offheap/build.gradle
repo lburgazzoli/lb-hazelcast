@@ -13,6 +13,7 @@ project.ext {
 dependencies {
     compile "net.openhft:lang:$openhftLangVersion"
     compile "net.openhft:chronicle:$openhftChronicleVersion"
+    //compile "net.openhft:collections:$openhftHugeCollectionVersion"
 }
 
 jar {
