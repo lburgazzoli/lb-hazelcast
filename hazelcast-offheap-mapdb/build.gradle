@@ -8,6 +8,11 @@ project.ext {
     ]
 }
 
+dependencies {
+    compile project(":hazelcast-offheap")
+    compile "org.mapdb:mapdb:$mapdbVersion"
+}
+
 jar {
     manifest {
         instruction 'Import-Package' , bundleImportPackages.join(',')

@@ -8,6 +8,12 @@ project.ext {
     ]
 }
 
+dependencies {
+    compile project(":hazelcast-offheap")
+    compile "net.openhft:lang:$openhftLangVersion"
+    compile "net.openhft:chronicle:$openhftChronicleVersion"
+}
+
 jar {
     manifest {
         instruction 'Import-Package' , bundleImportPackages.join(',')

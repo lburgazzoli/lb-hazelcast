@@ -18,12 +18,13 @@ subprojects {
     project.ext.openhftChronicleVersion   = '2.0.3'
     project.ext.hazelcastVersion          = '3.1.5'
     project.ext.osgiVersion               = '5.0.0'
-    project.ext.guavaVersion              = '15.0'
-    project.ext.axonVersion               = '2.0.8'
+    project.ext.guavaVersion              = '16.0'
     project.ext.junitVersion              = '4.11'
     project.ext.felixVersion              = '4.2.1'
     project.ext.paxExamVersion            = '3.4.0'
     project.ext.paxUrlVersion             = '1.6.0'
+    project.ext.mapdbVersion              = '0.9.9'
+    project.ext.directmemoryVersion       = '0.2'
     
     repositories {
         maven { url 'http://repo1.maven.org/maven2' }
