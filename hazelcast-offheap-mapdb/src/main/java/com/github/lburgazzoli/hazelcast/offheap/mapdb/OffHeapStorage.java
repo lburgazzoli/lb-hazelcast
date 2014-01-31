@@ -31,7 +31,7 @@ public class OffHeapStorage implements Storage<DataRef> {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapStorage.class);
 
     private final DB m_store;
-    private final HTreeMap m_map;
+    private final HTreeMap<Integer,DataRef> m_map;
 
     /**
      * c-tor

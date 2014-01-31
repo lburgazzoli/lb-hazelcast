@@ -49,8 +49,6 @@ public final class Example01 {
 
         /**
          * c-tor
-         *
-         * @param threshold
          */
         public SimpleThresholdPredicate(int threshold) {
             m_threshold = threshold;
@@ -61,7 +59,7 @@ public final class Example01 {
             JsonNode node = mapEntry.getValue();
             return node.get("data").get("value_1").asInt() >= m_threshold;
         }
-    };
+    }
 
     /**
      *
@@ -71,8 +69,6 @@ public final class Example01 {
 
         /**
          * c-tor
-         *
-         * @param id
          */
         public SimpleEntryListener(String id) {
             m_id = id;
@@ -96,16 +92,15 @@ public final class Example01 {
 
     /**
      *
-     * @return
      */
     private HazelcastInstance newHzInstance() {
         Config cfg = new Config();
         cfg.setProperty("hazelcast.logging.type","slf4j");
 
         cfg.getSerializationConfig().getSerializerConfigs().add(
-            new SerializerConfig().
-                setTypeClass(ObjectNode.class).
-                setImplementation(new PlainJsonSerializer(JsonNode.class))
+            new SerializerConfig()
+                .setTypeClass(ObjectNode.class)
+                .setImplementation(PlainJsonSerializer.make(JsonNode.class))
         );
 
         NetworkConfig network = cfg.getNetworkConfig();
@@ -130,7 +125,7 @@ public final class Example01 {
      */
     private void run() throws Exception {
         IMap<String,JsonNode> m1 = newHzInstance().getMap("map.json");
-        IMap<String,JsonNode> m2 = newHzInstance().getMap("map.json");;
+        IMap<String,JsonNode> m2 = newHzInstance().getMap("map.json");
 
         m2.addEntryListener(
             new SimpleEntryListener("all"),

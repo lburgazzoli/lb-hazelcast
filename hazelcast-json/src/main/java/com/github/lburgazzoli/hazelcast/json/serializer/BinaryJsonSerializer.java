@@ -28,4 +28,13 @@ public class BinaryJsonSerializer<T> extends JsonSerializer<T> {
     public BinaryJsonSerializer(Class<T> type) {
         super(type, JsonSerializationConstants.TYPEID_BINARY,new SmileFactory());
     }
+
+    /**
+     *
+     * @param type
+     * @return
+     */
+    public static <V> BinaryJsonSerializer<V> make(Class<V> type) {
+        return new BinaryJsonSerializer<V>(type);
+    }
 }

@@ -26,4 +26,13 @@ public class PlainJsonSerializer<T> extends JsonSerializer<T> {
     public PlainJsonSerializer(Class<T> type) {
         super(type, JsonSerializationConstants.TYPEID_PLAIN);
     }
+
+    /**
+     *
+     * @param type
+     * @return
+     */
+    public static <V> PlainJsonSerializer<V> make(Class<V> type) {
+        return new PlainJsonSerializer<V>(type);
+    }
 }
