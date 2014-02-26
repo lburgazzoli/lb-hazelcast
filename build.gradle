@@ -13,18 +13,16 @@ subprojects {
     project.ext.slf4jVersion              = '1.7.5'
     project.ext.log4jVersion              = '1.2.17'
     project.ext.jacksonVersion            = '2.3.1'
-    project.ext.jacksonAnnotationsVersion = '2.3.0'
+    project.ext.jacksonAnnotationsVersion = '2.3.1'
     project.ext.openhftLangVersion        = '6.1.4'
     project.ext.openhftChronicleVersion   = '2.0.3'
     project.ext.hazelcastVersion          = '3.1.5'
     project.ext.osgiVersion               = '5.0.0'
     project.ext.guavaVersion              = '16.0'
-    project.ext.axonVersion               = '2.0.8'
     project.ext.junitVersion              = '4.11'
     project.ext.felixVersion              = '4.2.1'
     project.ext.paxExamVersion            = '3.4.0'
     project.ext.paxUrlVersion             = '1.6.0'
-    project.ext.mapdbVersion              = '0.9.9'
     project.ext.directmemoryVersion       = '0.2'
 
     repositories {
@@ -41,16 +39,16 @@ subprojects {
     }
 
     dependencies {
-        compile 'org.apache.commons:commons-lang3:3.1'
-        compile 'commons-beanutils:commons-beanutils:1.8.3'
-        compile 'org.slf4j:slf4j-api:1.7.5'
-        compile 'org.slf4j:slf4j-ext:1.7.5'
-        compile 'org.slf4j:jul-to-slf4j:1.7.5'
-        compile 'org.slf4j:jcl-over-slf4j:1.7.5'
-        compile 'org.slf4j:slf4j-log4j12:1.7.5'
-        compile 'log4j:log4j:1.2.17'
-        compile 'com.google.guava:guava:15.0'
-        compile 'com.hazelcast:hazelcast:3.1.5'
+        compile "org.apache.commons:commons-lang3:3.1"
+        compile "commons-beanutils:commons-beanutils:1.8.3"
+        compile "org.slf4j:slf4j-api:$slf4jVersion"
+        compile "org.slf4j:slf4j-ext:$slf4jVersion"
+        compile "org.slf4j:jul-to-slf4j:$slf4jVersion"
+        compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
+        compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
+        compile "log4j:log4j:$log4jVersion"
+        compile "com.google.guava:guava:$guavaVersion"
+        compile "com.hazelcast:hazelcast:$hazelcastVersion"
     }
 
     [compileJava, compileTestJava]*.options*.compilerArgs = [

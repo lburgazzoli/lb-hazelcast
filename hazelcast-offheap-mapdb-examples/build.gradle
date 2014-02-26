@@ -1,6 +1,0 @@
-
-dependencies {
-    compile project(':hazelcast-offheap')
-    compile project(':hazelcast-offheap-mapdb')
-}
-
