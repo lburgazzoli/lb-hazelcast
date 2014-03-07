@@ -23,6 +23,8 @@ import com.hazelcast.core.IMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 /**
  *
  */
@@ -39,10 +41,12 @@ public final class HftExample01 {
      * @return
      */
     private HazelcastInstance newHzInstance() {
+        String basePath = System.getProperty("java.io.tmpdir") + "/hz-offheap";
+        new File(basePath).mkdirs();
+
         Config cfg = new Config();
         cfg.setProperty("hazelcast.logging.type", "slf4j");
-        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.size", "2048");
-        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.lazyInit", "true");
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.path",basePath);
 
         NetworkConfig network = cfg.getNetworkConfig();
         JoinConfig join = network.getJoin();

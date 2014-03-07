@@ -16,50 +16,45 @@
 package com.github.lburgazzoli.hazelcast.offheap.hft;
 
 import com.hazelcast.nio.serialization.ClassDefinition;
-import com.hazelcast.nio.serialization.ClassDefinitionSetter;
 import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.storage.DataRef;
-import net.openhft.lang.io.DirectBytes;
-import net.openhft.lang.io.DirectStore;
+import net.openhft.lang.io.Bytes;
+import net.openhft.lang.io.serialization.BytesMarshallable;
+import org.jetbrains.annotations.NotNull;
+
 
 /**
  * @author lburgazzoli
  */
-public class OffHeapDataRef implements DataRef {
-    private final int m_type;
-    private final ClassDefinition m_classDefinition;
-    private final DirectBytes m_data;
+public class OffHeapDataRef implements DataRef, BytesMarshallable {
+    private int m_type;
+    private int m_size;
+    private int m_factoryId;
+    private int m_classId;
+    private int m_version;
 
     /**
-     *
-     * @param store
-     * @param data
+     * c-tor
      */
-    public OffHeapDataRef(DirectStore store,Data data) {
-        m_type = data.getType();
-        m_classDefinition = data.getClassDefinition();
-
-        m_data = store.createSlice();
-        m_data.writeInt(data.bufferSize());
-        m_data.write(data.getBuffer());
+    public OffHeapDataRef() {
+        m_type      = -1;
+        m_size      = -1;
+        m_factoryId = -1;
+        m_classId   = -1;
+        m_version   = -1;
     }
 
     /**
+     * c-tor
      *
-     * @param store
-     * @param address
+     * @param data
      */
-    public OffHeapDataRef(DirectStore store,long address) {
-        m_type = -1;
-        m_classDefinition = null;
-        m_data = null;
-
-        /*
-        m_type = data.getType();
-        m_classDefinition = data.getClassDefinition();
-        m_data = store.createSlice();
-        m_data.write(data.getBuffer());
-        */
+    public OffHeapDataRef(Data data) {
+        m_type      = data.getType();
+        m_size      = data.getBuffer().length;
+        m_factoryId = data.getClassDefinition().getFactoryId();
+        m_classId   = data.getClassDefinition().getClassId();
+        m_version   = data.getClassDefinition().getVersion();
     }
 
     // *************************************************************************
@@ -68,7 +63,7 @@ public class OffHeapDataRef implements DataRef {
 
     @Override
     public int size() {
-        return (int)m_data.position();
+        return m_size;
     }
 
     @Override
@@ -77,36 +72,60 @@ public class OffHeapDataRef implements DataRef {
     }
 
     // *************************************************************************
-    //
+    // Getters
     // *************************************************************************
 
     /**
      *
      * @return
      */
-    public long address() {
-        return m_data.startAddr();
+    public int getType() {
+        return m_type;
     }
 
     /**
      *
      * @return
      */
-    public Data asData() {
-        m_data.position(0L);
-
-        int bufferSize = m_data.readInt();
-        byte[] buffer = new byte[bufferSize];
-        m_data.readFully(buffer);
-
-
-        return ClassDefinitionSetter.setClassDefinition(m_classDefinition,new Data(m_type,buffer));
+    public int getFactoryId() {
+        return m_factoryId;
     }
 
     /**
      *
+     * @return
      */
-    public void destroy() {
-        m_data.close();
+    public int getClassId() {
+        return m_classId;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getVersion() {
+        return m_version;
+    }
+
+    // *************************************************************************
+    // BytesMarshallable
+    // *************************************************************************
+
+    @Override
+    public void readMarshallable(@NotNull Bytes in) throws IllegalStateException {
+        m_type      = in.readInt();
+        m_size      = in.readInt();
+        m_factoryId = in.readInt();
+        m_classId   = in.readInt();
+        m_version   = in.readInt();
+    }
+
+    @Override
+    public void writeMarshallable(@NotNull Bytes out) {
+        out.writeInt(m_type);
+        out.writeInt(m_size);
+        out.writeInt(m_factoryId);
+        out.writeInt(m_classId);
+        out.writeInt(m_version);
     }
 }

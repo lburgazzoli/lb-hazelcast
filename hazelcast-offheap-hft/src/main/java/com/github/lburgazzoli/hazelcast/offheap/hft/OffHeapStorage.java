@@ -15,15 +15,21 @@
  */
 package com.github.lburgazzoli.hazelcast.offheap.hft;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.hazelcast.nio.serialization.ClassDefinition;
+import com.hazelcast.nio.serialization.ClassDefinitionSetter;
 import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.storage.DataRef;
 import com.hazelcast.storage.Storage;
-import net.openhft.lang.io.DirectStore;
+import net.openhft.collections.SharedHashMap;
+import net.openhft.collections.SharedHashMapBuilder;
+import net.openhft.lang.model.DataValueClasses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * @author lburgazzoli
@@ -31,18 +37,27 @@ import java.util.Map;
 public class OffHeapStorage implements Storage<DataRef> {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapStorage.class);
 
-    private final DirectStore m_store;
-    private final Map<Integer,OffHeapDataRef> m_dataRefs;
+    private final SharedHashMap<Integer,OffHeapDataRef> m_dataRefMap;
+    private final SharedHashMap<Integer,OffHeapDataVal> m_dataValMap;
+    private final Set<ClassDefinition> m_defs;
+    private final ThreadLocal<OffHeapDataVal> m_thData;
 
     /**
      * c-tor
      *
-     * @param size
-     * @param lazy
+     * @param path
      */
-    public OffHeapStorage(long size, boolean lazy) {
-        m_dataRefs = Maps.newHashMap();
-        m_store = new DirectStore(null,size,lazy);
+    public OffHeapStorage(String path) throws IOException {
+        m_defs       = Sets.newConcurrentHashSet();
+        m_dataRefMap = getSharedHashMap(path,"data-ref",OffHeapDataRef.class);
+        m_dataValMap = getSharedHashMap(path,"data-val",OffHeapDataVal.class);
+
+        m_thData = new ThreadLocal<OffHeapDataVal>() {
+            @Override
+            public OffHeapDataVal initialValue() {
+                return DataValueClasses.newDirectReference(OffHeapDataVal.class);
+            }
+        };
     }
 
     // *************************************************************************
@@ -51,43 +66,100 @@ public class OffHeapStorage implements Storage<DataRef> {
 
     @Override
     public DataRef put(int hash, Data data) {
-        LOGGER.debug("put {} -> <{}>",hash,data.getBuffer());
 
-        OffHeapDataRef dataref = m_dataRefs.get(hash);
+        OffHeapDataRef dr = new OffHeapDataRef(data);
 
-        if(dataref != null) {
-            dataref.destroy();
+        m_defs.add(data.getClassDefinition());
+        m_dataRefMap.put(hash, dr);
 
-            //TODO: reuse chunk OffHeapDataRef(DirectStore,long)
-            dataref = new OffHeapDataRef(m_store,data);
-        } else {
-            dataref = new OffHeapDataRef(m_store,data);
-        }
+        OffHeapDataVal ofd = m_dataValMap.acquireUsing(hash,m_thData.get());
+        ofd.addAtomicData(data.getBuffer());
 
-        LOGGER.debug("put {} : bufferSize {}",hash,data.bufferSize());
-        LOGGER.debug("put {} : sliceSize  {}",hash,dataref.size());
-
-        m_dataRefs.put(hash,dataref);
-
-        return dataref;
+        return dr;
     }
 
     @Override
     public Data get(int hash, DataRef ref) {
-        LOGGER.debug("get {} -> {}",hash,ref.size());
-        return ((OffHeapDataRef)ref).asData();
+        if(ref instanceof OffHeapDataRef) {
+            OffHeapDataRef odr = (OffHeapDataRef)ref;
+            OffHeapDataVal ofd = m_dataValMap.getUsing(hash, m_thData.get());
+
+            if(ofd != null) {
+                return ClassDefinitionSetter.setClassDefinition(
+                    getClassDefinition(odr),
+                    new Data(
+                        odr.getType(),
+                        ofd.getAtomicData(new byte[ref.size()])));
+            }
+        }
+
+        return null;
     }
 
     @Override
     public void remove(int hash, DataRef ref) {
-        LOGGER.debug("remove {} -> {}",hash,ref.size());
-        ((OffHeapDataRef)ref).destroy();
-        m_dataRefs.remove(hash);
+        m_dataValMap.remove(hash);
+        m_dataRefMap.remove(hash);
     }
 
     @Override
     public void destroy() {
-        LOGGER.debug("destroy");
-        m_store.free();
+        try {
+            m_dataValMap.close();
+        } catch (IOException e) {
+            LOGGER.warn("DataValMap - IOException",e);
+        }
+
+        try {
+            m_dataRefMap.close();
+        } catch (IOException e) {
+            LOGGER.warn("DataRefMap - IOException",e);
+        }
+    }
+
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    /**
+     *
+     * @param data
+     * @return
+     */
+    private synchronized ClassDefinition getClassDefinition(OffHeapDataRef data) {
+        for(ClassDefinition cd : m_defs) {
+            if( cd.getClassId()   == data.getClassId()   &&
+                cd.getFactoryId() == data.getFactoryId() &&
+                cd.getVersion()   == data.getVersion()   ) {
+                return cd;
+            }
+        }
+
+        return null;
+    }
+
+
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    /**
+     *
+     * @param path
+     * @param name
+     * @param vType
+     * @param <T>
+     * @return
+     * @throws IOException
+     */
+    private static <T> SharedHashMap<Integer,T> getSharedHashMap(String path,String name,Class<T> vType) throws IOException {
+        File dataFile = new File(path,name);
+        dataFile.delete();
+        dataFile.deleteOnExit();
+
+        return new SharedHashMapBuilder().create(
+            dataFile,
+            Integer.class,
+            vType);
     }
 }

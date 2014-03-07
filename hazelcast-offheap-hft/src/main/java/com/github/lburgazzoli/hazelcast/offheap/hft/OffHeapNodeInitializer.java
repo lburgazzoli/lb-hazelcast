@@ -23,21 +23,22 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.util.Properties;
+
 /**
  * @author lburgazzoli
  */
 public class OffHeapNodeInitializer extends DefaultNodeInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapNodeInitializer.class);
 
-    private long m_size;
-    private boolean m_lazyInit;
+    private String m_path;
 
     /**
      * c-tor
      */
     public OffHeapNodeInitializer() {
-        m_size = -1;
-        m_lazyInit = false;
+        m_path = null;
     }
 
     // *************************************************************************
@@ -48,22 +49,23 @@ public class OffHeapNodeInitializer extends DefaultNodeInitializer {
     public void afterInitialize(Node node) {
         super.afterInitialize(node);
 
-        String size = node.getConfig().getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.size");
-        String lazy = node.getConfig().getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.lazyInit");
+        Properties props =  node.getConfig().getProperties();
+        String     path  = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.path");
 
-        if(StringUtils.isNotBlank(size)) {
-            m_size = Long.parseLong(size);
-            LOGGER.debug("OffHeap size: {}", m_size);
-        }
-
-        if(StringUtils.isNotBlank(lazy)) {
-            m_lazyInit = StringUtils.equalsIgnoreCase("true",lazy);
-            LOGGER.debug("OffHeap lazy: {}", m_lazyInit);
+        if(StringUtils.isNotBlank(path)) {
+            m_path = path;
+            LOGGER.debug("OffHeap path: {}", m_path);
         }
     }
 
     @Override
     public Storage<DataRef> getOffHeapStorage() {
-        return new OffHeapStorage(m_size,m_lazyInit);
+        try {
+            return new OffHeapStorage(m_path);
+        } catch(IOException e) {
+            LOGGER.warn("IOException",e);
+        }
+
+        return super.getOffHeapStorage();
     }
 }

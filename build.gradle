@@ -10,20 +10,20 @@ subprojects {
     version      = '1.0.0.SNAPSHOT'
     group        = 'com.github.lburgazzoli'
 
-    project.ext.slf4jVersion              = '1.7.5'
+    project.ext.slf4jVersion              = '1.7.6'
     project.ext.log4jVersion              = '1.2.17'
     project.ext.jacksonVersion            = '2.3.1'
     project.ext.jacksonAnnotationsVersion = '2.3.1'
-    project.ext.openhftLangVersion        = '6.1.4'
+    project.ext.openhftLangVersion        = '6.3'
+    project.ext.openhftCollectionsVersion = '3.0a'
     project.ext.openhftChronicleVersion   = '2.0.3'
-    project.ext.hazelcastVersion          = '3.1.5'
+    project.ext.hazelcastVersion          = '3.1.6'
     project.ext.osgiVersion               = '5.0.0'
     project.ext.guavaVersion              = '16.0'
     project.ext.junitVersion              = '4.11'
     project.ext.felixVersion              = '4.2.1'
     project.ext.paxExamVersion            = '3.4.0'
     project.ext.paxUrlVersion             = '1.6.0'
-    project.ext.directmemoryVersion       = '0.2'
 
     repositories {
         maven { url 'http://repo1.maven.org/maven2' }
