@@ -21,13 +21,12 @@ import com.hazelcast.nio.serialization.ClassDefinitionSetter;
 import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.storage.DataRef;
 import com.hazelcast.storage.Storage;
+import net.openhft.collections.OffHeapUtil;
 import net.openhft.collections.SharedHashMap;
-import net.openhft.collections.SharedHashMapBuilder;
 import net.openhft.lang.model.DataValueClasses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
@@ -49,13 +48,13 @@ public class OffHeapStorage implements Storage<DataRef> {
      */
     public OffHeapStorage(String path) throws IOException {
         m_defs       = Sets.newConcurrentHashSet();
-        m_dataRefMap = getSharedHashMap(path,"data-ref",OffHeapDataRef.class);
-        m_dataValMap = getSharedHashMap(path,"data-val",OffHeapDataVal.class);
+        m_dataRefMap = OffHeapUtil.getSharedHashMap(path, "data-ref", OffHeapDataRef.class);
+        m_dataValMap = OffHeapUtil.getSharedHashMap(path, "data-val", OffHeapDataVal.class);
 
         m_thData = new ThreadLocal<OffHeapDataVal>() {
             @Override
             public OffHeapDataVal initialValue() {
-                return DataValueClasses.newDirectReference(OffHeapDataVal.class);
+                return new OffHeapDataVal();
             }
         };
     }
@@ -69,11 +68,14 @@ public class OffHeapStorage implements Storage<DataRef> {
 
         OffHeapDataRef dr = new OffHeapDataRef(data);
 
-        m_defs.add(data.getClassDefinition());
+        if(data.getClassDefinition() != null) {
+            m_defs.add(data.getClassDefinition());
+        }
+
         m_dataRefMap.put(hash, dr);
 
         OffHeapDataVal ofd = m_dataValMap.acquireUsing(hash,m_thData.get());
-        ofd.addAtomicData(data.getBuffer());
+        ofd.set(data.getBuffer());
 
         return dr;
     }
@@ -81,15 +83,15 @@ public class OffHeapStorage implements Storage<DataRef> {
     @Override
     public Data get(int hash, DataRef ref) {
         if(ref instanceof OffHeapDataRef) {
-            OffHeapDataRef odr = (OffHeapDataRef)ref;
-            OffHeapDataVal ofd = m_dataValMap.getUsing(hash, m_thData.get());
+            OffHeapDataRef ohr = (OffHeapDataRef)ref;
+            OffHeapDataVal ohv = m_dataValMap.getUsing(hash, m_thData.get());
 
-            if(ofd != null) {
+            if(ohv != null) {
                 return ClassDefinitionSetter.setClassDefinition(
-                    getClassDefinition(odr),
+                    getClassDefinition(ohr),
                     new Data(
-                        odr.getType(),
-                        ofd.getAtomicData(new byte[ref.size()])));
+                        ohr.getType(),
+                        ohv.get()));
             }
         }
 
@@ -107,13 +109,13 @@ public class OffHeapStorage implements Storage<DataRef> {
         try {
             m_dataValMap.close();
         } catch (IOException e) {
-            LOGGER.warn("DataValMap - IOException",e);
+            LOGGER.warn("DataValMap - IOException", e);
         }
 
         try {
             m_dataRefMap.close();
         } catch (IOException e) {
-            LOGGER.warn("DataRefMap - IOException",e);
+            LOGGER.warn("DataRefMap - IOException", e);
         }
     }
 
@@ -136,30 +138,5 @@ public class OffHeapStorage implements Storage<DataRef> {
         }
 
         return null;
-    }
-
-
-    // *************************************************************************
-    //
-    // *************************************************************************
-
-    /**
-     *
-     * @param path
-     * @param name
-     * @param vType
-     * @param <T>
-     * @return
-     * @throws IOException
-     */
-    private static <T> SharedHashMap<Integer,T> getSharedHashMap(String path,String name,Class<T> vType) throws IOException {
-        File dataFile = new File(path,name);
-        dataFile.delete();
-        dataFile.deleteOnExit();
-
-        return new SharedHashMapBuilder().create(
-            dataFile,
-            Integer.class,
-            vType);
     }
 }

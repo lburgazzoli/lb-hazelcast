@@ -15,7 +15,6 @@
  */
 package com.github.lburgazzoli.hazelcast.offheap.hft;
 
-import com.hazelcast.nio.serialization.ClassDefinition;
 import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.storage.DataRef;
 import net.openhft.lang.io.Bytes;
@@ -50,11 +49,14 @@ public class OffHeapDataRef implements DataRef, BytesMarshallable {
      * @param data
      */
     public OffHeapDataRef(Data data) {
-        m_type      = data.getType();
-        m_size      = data.getBuffer().length;
-        m_factoryId = data.getClassDefinition().getFactoryId();
-        m_classId   = data.getClassDefinition().getClassId();
-        m_version   = data.getClassDefinition().getVersion();
+        m_type = data.getType();
+        m_size = data.getBuffer().length;
+
+        if(data.getClassDefinition() != null) {
+            m_factoryId = data.getClassDefinition().getFactoryId();
+            m_classId   = data.getClassDefinition().getClassId();
+            m_version   = data.getClassDefinition().getVersion();
+        }
     }
 
     // *************************************************************************
