@@ -5,6 +5,8 @@ import net.openhft.lang.model.Byteable;
 
 /**
  * @author lburgazzoli
+ *
+ * TODO: record lock
  */
 public class OffHeapDataVal implements Byteable {
     private Bytes m_bytes;

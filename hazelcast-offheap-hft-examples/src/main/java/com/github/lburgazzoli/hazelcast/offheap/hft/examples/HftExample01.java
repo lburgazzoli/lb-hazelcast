@@ -70,7 +70,9 @@ public final class HftExample01 {
     private void run() throws Exception {
         IMap<String,String> map = newHzInstance().getMap(MAPNAME);
         LOGGER.debug("put {}",map.put("key1", "val1"));
+        LOGGER.debug("put {}",map.put("key2", "val2"));
         LOGGER.debug("get {}",map.get("key1"));
+        LOGGER.debug("get {}",map.get("key2"));
 
         Hazelcast.shutdownAll();
     }

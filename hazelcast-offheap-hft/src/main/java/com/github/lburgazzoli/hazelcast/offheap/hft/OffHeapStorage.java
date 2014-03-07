@@ -23,7 +23,6 @@ import com.hazelcast.storage.DataRef;
 import com.hazelcast.storage.Storage;
 import net.openhft.collections.OffHeapUtil;
 import net.openhft.collections.SharedHashMap;
-import net.openhft.lang.model.DataValueClasses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,6 @@ import java.util.Set;
 public class OffHeapStorage implements Storage<DataRef> {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapStorage.class);
 
-    private final SharedHashMap<Integer,OffHeapDataRef> m_dataRefMap;
     private final SharedHashMap<Integer,OffHeapDataVal> m_dataValMap;
     private final Set<ClassDefinition> m_defs;
     private final ThreadLocal<OffHeapDataVal> m_thData;
@@ -48,7 +46,6 @@ public class OffHeapStorage implements Storage<DataRef> {
      */
     public OffHeapStorage(String path) throws IOException {
         m_defs       = Sets.newConcurrentHashSet();
-        m_dataRefMap = OffHeapUtil.getSharedHashMap(path, "data-ref", OffHeapDataRef.class);
         m_dataValMap = OffHeapUtil.getSharedHashMap(path, "data-val", OffHeapDataVal.class);
 
         m_thData = new ThreadLocal<OffHeapDataVal>() {
@@ -65,14 +62,10 @@ public class OffHeapStorage implements Storage<DataRef> {
 
     @Override
     public DataRef put(int hash, Data data) {
-
         OffHeapDataRef dr = new OffHeapDataRef(data);
-
         if(data.getClassDefinition() != null) {
             m_defs.add(data.getClassDefinition());
         }
-
-        m_dataRefMap.put(hash, dr);
 
         OffHeapDataVal ofd = m_dataValMap.acquireUsing(hash,m_thData.get());
         ofd.set(data.getBuffer());
@@ -100,9 +93,8 @@ public class OffHeapStorage implements Storage<DataRef> {
 
     @Override
     public void remove(int hash, DataRef ref) {
+        //TODO
         //m_dataValMap.remove(hash);
-        //m_dataRefMap.remove(hash);
-        m_dataRefMap.remove(hash);
     }
 
     @Override
@@ -111,12 +103,6 @@ public class OffHeapStorage implements Storage<DataRef> {
             m_dataValMap.close();
         } catch (IOException e) {
             LOGGER.warn("DataValMap - IOException", e);
-        }
-
-        try {
-            m_dataRefMap.close();
-        } catch (IOException e) {
-            LOGGER.warn("DataRefMap - IOException", e);
         }
     }
 

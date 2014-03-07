@@ -17,15 +17,12 @@ package com.github.lburgazzoli.hazelcast.offheap.hft;
 
 import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.storage.DataRef;
-import net.openhft.lang.io.Bytes;
-import net.openhft.lang.io.serialization.BytesMarshallable;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
  * @author lburgazzoli
  */
-public class OffHeapDataRef implements DataRef, BytesMarshallable {
+public class OffHeapDataRef implements DataRef {
     private int m_type;
     private int m_size;
     private int m_factoryId;
@@ -107,27 +104,5 @@ public class OffHeapDataRef implements DataRef, BytesMarshallable {
      */
     public int getVersion() {
         return m_version;
-    }
-
-    // *************************************************************************
-    // BytesMarshallable
-    // *************************************************************************
-
-    @Override
-    public void readMarshallable(@NotNull Bytes in) throws IllegalStateException {
-        m_type      = in.readInt();
-        m_size      = in.readInt();
-        m_factoryId = in.readInt();
-        m_classId   = in.readInt();
-        m_version   = in.readInt();
-    }
-
-    @Override
-    public void writeMarshallable(@NotNull Bytes out) {
-        out.writeInt(m_type);
-        out.writeInt(m_size);
-        out.writeInt(m_factoryId);
-        out.writeInt(m_classId);
-        out.writeInt(m_version);
     }
 }
