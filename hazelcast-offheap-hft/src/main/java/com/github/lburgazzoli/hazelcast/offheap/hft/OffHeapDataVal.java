@@ -16,14 +16,17 @@ public class OffHeapDataVal implements Byteable {
     }
 
     public void set(byte[] bytes) {
-        m_bytes.writeInt(m_offset,bytes.length);
+        m_bytes.position(m_offset);
+        m_bytes.writeInt(bytes.length);
+        m_bytes.write(bytes);
     }
 
     public byte[] get() {
-        int len = m_bytes.readInt(m_offset);
+        m_bytes.position(m_offset);
 
-        byte[] buffer = new byte[0];
-        //m_bytes.readFully(buffer,(int)m_offset + 4,len);
+        int len = m_bytes.readInt();
+        byte[] buffer = new byte[len];
+        m_bytes.readFully(buffer);
 
         return buffer;
     }

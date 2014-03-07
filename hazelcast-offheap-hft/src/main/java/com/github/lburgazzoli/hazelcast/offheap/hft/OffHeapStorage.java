@@ -100,7 +100,8 @@ public class OffHeapStorage implements Storage<DataRef> {
 
     @Override
     public void remove(int hash, DataRef ref) {
-        m_dataValMap.remove(hash);
+        //m_dataValMap.remove(hash);
+        //m_dataRefMap.remove(hash);
         m_dataRefMap.remove(hash);
     }
 
