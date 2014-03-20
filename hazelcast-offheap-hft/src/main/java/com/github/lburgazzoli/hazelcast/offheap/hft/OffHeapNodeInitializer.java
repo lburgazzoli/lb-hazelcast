@@ -19,12 +19,17 @@ import com.hazelcast.instance.DefaultNodeInitializer;
 import com.hazelcast.instance.Node;
 import com.hazelcast.storage.DataRef;
 import com.hazelcast.storage.Storage;
+import net.openhft.collections.SharedHashMap;
+import net.openhft.collections.SharedHashMapBuilder;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.UUID;
 
 /**
  * @author lburgazzoli
@@ -32,13 +37,13 @@ import java.util.Properties;
 public class OffHeapNodeInitializer extends DefaultNodeInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapNodeInitializer.class);
 
-    private String m_path;
+    private Properties m_props;
 
     /**
      * c-tor
      */
     public OffHeapNodeInitializer() {
-        m_path = null;
+        m_props = null;
     }
 
     // *************************************************************************
@@ -48,24 +53,69 @@ public class OffHeapNodeInitializer extends DefaultNodeInitializer {
     @Override
     public void afterInitialize(Node node) {
         super.afterInitialize(node);
-
-        Properties props =  node.getConfig().getProperties();
-        String     path  = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.path");
-
-        if(StringUtils.isNotBlank(path)) {
-            m_path = path;
-            LOGGER.debug("OffHeap path: {}", m_path);
-        }
+        m_props = node.getConfig().getProperties();
     }
 
     @Override
     public Storage<DataRef> getOffHeapStorage() {
         try {
-            return new OffHeapStorage(m_path);
+            return new OffHeapStorage(getSharedHashMap(m_props));
         } catch(IOException e) {
             LOGGER.warn("IOException",e);
         }
 
         return super.getOffHeapStorage();
     }
+
+    /**
+     *
+     * @return
+     * @throws IOException
+     */
+    public static SharedHashMap<Integer,OffHeapDataVal> getSharedHashMap(Properties props) throws IOException {
+
+        SharedHashMapBuilder shmb = new SharedHashMapBuilder();
+
+        String entries = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.entries");
+        if(StringUtils.isNotBlank(entries)) {
+            shmb.entries(Long.parseLong(entries));
+        }
+
+        String entrySize = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.entrySize");
+        if(StringUtils.isNotBlank(entrySize)) {
+            shmb.entrySize(Integer.parseInt(entrySize));
+        }
+
+        String minSegments = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.minSegments");
+        if(StringUtils.isNotBlank(minSegments)) {
+            shmb.minSegments(Integer.parseInt(minSegments));
+        }
+
+        String path = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.path");
+        String name = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.name");
+
+        if(StringUtils.isBlank(path)) {
+            path = new File(FileUtils.getTempDirectoryPath(), UUID.randomUUID().toString()).getAbsolutePath();
+        }
+        if(StringUtils.isBlank(name)) {
+            name = UUID.randomUUID().toString();
+        }
+
+        LOGGER.debug("OffHeap path        : {}", path);
+        LOGGER.debug("OffHeap name        : {}", name);
+        LOGGER.debug("OffHeap entries     : {}", shmb.entries());
+        LOGGER.debug("OffHeap entrySize   : {}", shmb.entrySize());
+        LOGGER.debug("OffHeap minSegments : {}", shmb.minSegments());
+
+        File dataFile = new File(path,name);
+        dataFile.delete();
+        dataFile.deleteOnExit();
+
+        return shmb.create(
+            new File(path,name),
+            Integer.class,
+            OffHeapDataVal.class);
+    }
+
+
 }

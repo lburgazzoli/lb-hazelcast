@@ -21,7 +21,6 @@ import com.hazelcast.nio.serialization.ClassDefinitionSetter;
 import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.storage.DataRef;
 import com.hazelcast.storage.Storage;
-import net.openhft.collections.OffHeapUtil;
 import net.openhft.collections.SharedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +41,11 @@ public class OffHeapStorage implements Storage<DataRef> {
     /**
      * c-tor
      *
-     * @param path
+     * @param map
      */
-    public OffHeapStorage(String path) throws IOException {
+    public OffHeapStorage(SharedHashMap<Integer,OffHeapDataVal> map) throws IOException {
         m_defs       = Sets.newConcurrentHashSet();
-        m_dataValMap = OffHeapUtil.getSharedHashMap(path, "data-val", OffHeapDataVal.class);
+        m_dataValMap = map;
 
         m_thData = new ThreadLocal<OffHeapDataVal>() {
             @Override

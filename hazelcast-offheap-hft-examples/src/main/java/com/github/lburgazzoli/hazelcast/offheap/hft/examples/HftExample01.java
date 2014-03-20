@@ -16,21 +16,24 @@
 package com.github.lburgazzoli.hazelcast.offheap.hft.examples;
 
 
-import com.hazelcast.config.*;
+import com.hazelcast.config.Config;
+import com.hazelcast.config.InMemoryFormat;
+import com.hazelcast.config.JoinConfig;
+import com.hazelcast.config.MapConfig;
+import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-
 /**
  *
  */
 public final class HftExample01 {
     private static final Logger LOGGER = LoggerFactory.getLogger(HftExample01.class);
-    private static final String MAPNAME = "map.offheap";
+    private static final String MAPNAME = "map-offheap";
+    private static final int    COUNT   = 10000;
 
     // *************************************************************************
     //
@@ -41,12 +44,13 @@ public final class HftExample01 {
      * @return
      */
     private HazelcastInstance newHzInstance() {
-        String basePath = System.getProperty("java.io.tmpdir") + "/hz-offheap";
-        new File(basePath).mkdirs();
-
         Config cfg = new Config();
         cfg.setProperty("hazelcast.logging.type", "slf4j");
-        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.path",basePath);
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.path",System.getProperty("java.io.tmpdir"));
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.name",MAPNAME);
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.entries","20000");
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.entrySize","1024");
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.minSegments","1024");
 
         NetworkConfig network = cfg.getNetworkConfig();
         JoinConfig join = network.getJoin();
@@ -68,11 +72,15 @@ public final class HftExample01 {
      * @throws Exception
      */
     private void run() throws Exception {
-        IMap<String,String> map = newHzInstance().getMap(MAPNAME);
-        LOGGER.debug("put {}",map.put("key1", "val1"));
-        LOGGER.debug("put {}",map.put("key2", "val2"));
-        LOGGER.debug("get {}",map.get("key1"));
-        LOGGER.debug("get {}",map.get("key2"));
+        IMap<Integer,String> map = newHzInstance().getMap(MAPNAME);
+
+        for(int i=0; i<COUNT; i++) {
+            map.put(i,"val_" + i);
+        }
+
+        for(int i=0; i<COUNT; i++) {
+            LOGGER.debug("get {}", map.get(i));
+        }
 
         Hazelcast.shutdownAll();
     }

@@ -26,10 +26,24 @@ import net.openhft.lang.model.Byteable;
 public class OffHeapDataVal implements Byteable {
     private Bytes m_bytes;
     private long m_offset;
+    private final int m_size;
 
+    /**
+     * c-tor
+     */
     public OffHeapDataVal() {
+        this(256);
+    }
+
+    /**
+     * c-tor
+     *
+     * @param size
+     */
+    public OffHeapDataVal(int size) {
         m_bytes = null;
         m_offset = 0;
+        m_size = size;
     }
 
     public void set(byte[] bytes) {
@@ -60,7 +74,12 @@ public class OffHeapDataVal implements Byteable {
     }
 
     @Override
+    public long offset() {
+        return m_offset;
+    }
+
+    @Override
     public int maxSize() {
-        return (int)m_offset;
+        return m_size;
     }
 }
