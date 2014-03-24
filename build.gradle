@@ -17,7 +17,7 @@ subprojects {
     project.ext.openhftLangVersion        = '6.3.3'
     project.ext.openhftCollectionsVersion = '3.0d'
     project.ext.openhftChronicleVersion   = '2.0.3'
-    project.ext.hazelcastVersion          = '3.1.6'
+    project.ext.hazelcastVersion          = '3.2'
     project.ext.osgiVersion               = '5.0.0'
     project.ext.guavaVersion              = '16.0.1'
     project.ext.junitVersion              = '4.11'

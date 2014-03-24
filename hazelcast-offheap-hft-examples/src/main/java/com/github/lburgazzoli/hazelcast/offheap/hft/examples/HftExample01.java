@@ -24,8 +24,11 @@ import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import net.openhft.lang.Maths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 /**
  *
@@ -44,17 +47,22 @@ public final class HftExample01 {
      * @return
      */
     private HazelcastInstance newHzInstance() {
+        long entries  = Maths.nextPower2(10000L, 1024L);
+        int  size     = 128;
+        int  segments = Maths.nextPower2(COUNT, 1024);
+
         Config cfg = new Config();
         cfg.setProperty("hazelcast.logging.type", "slf4j");
         cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.path",System.getProperty("java.io.tmpdir"));
         cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.name",MAPNAME);
-        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.entries","20000");
-        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.entrySize","1024");
-        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.minSegments","1024");
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.entries",Long.toString(entries));
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.entrySize",Integer.toString(size));
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.minSegments",Integer.toString(segments));
+        cfg.setProperty("com.github.lburgazzoli.hazelcast.offheap.hft.cleanOnStart","true");
 
         NetworkConfig network = cfg.getNetworkConfig();
         JoinConfig join = network.getJoin();
-        join.getMulticastConfig().setEnabled(true);
+        join.getMulticastConfig().setEnabled(false);
         join.getTcpIpConfig().setEnabled(false);
 
         network.getInterfaces().setEnabled(false);

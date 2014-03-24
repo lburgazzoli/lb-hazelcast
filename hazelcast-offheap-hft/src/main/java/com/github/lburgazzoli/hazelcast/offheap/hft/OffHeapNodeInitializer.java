@@ -91,8 +91,9 @@ public class OffHeapNodeInitializer extends DefaultNodeInitializer {
             shmb.minSegments(Integer.parseInt(minSegments));
         }
 
-        String path = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.path");
-        String name = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.name");
+        String path  = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.path");
+        String name  = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.name");
+        String clean = props.getProperty("com.github.lburgazzoli.hazelcast.offheap.hft.cleanOnStart");
 
         if(StringUtils.isBlank(path)) {
             path = new File(FileUtils.getTempDirectoryPath(), UUID.randomUUID().toString()).getAbsolutePath();
@@ -101,21 +102,14 @@ public class OffHeapNodeInitializer extends DefaultNodeInitializer {
             name = UUID.randomUUID().toString();
         }
 
-        LOGGER.debug("OffHeap path        : {}", path);
-        LOGGER.debug("OffHeap name        : {}", name);
-        LOGGER.debug("OffHeap entries     : {}", shmb.entries());
-        LOGGER.debug("OffHeap entrySize   : {}", shmb.entrySize());
-        LOGGER.debug("OffHeap minSegments : {}", shmb.minSegments());
-
-        File dataFile = new File(path,name);
-        dataFile.delete();
-        dataFile.deleteOnExit();
+        if(StringUtils.equalsIgnoreCase("true",clean)) {
+            File fullPath = new File(path,name);
+            LOGGER.debug("Deleting {} => {}",fullPath.getAbsolutePath(),fullPath.delete());
+        }
 
         return shmb.create(
             new File(path,name),
             Integer.class,
             OffHeapDataVal.class);
     }
-
-
 }

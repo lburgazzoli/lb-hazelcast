@@ -43,14 +43,14 @@ public class OffHeapStorage implements Storage<DataRef> {
      *
      * @param map
      */
-    public OffHeapStorage(SharedHashMap<Integer,OffHeapDataVal> map) throws IOException {
+    public OffHeapStorage(final SharedHashMap<Integer,OffHeapDataVal> map) throws IOException {
         m_defs       = Sets.newConcurrentHashSet();
         m_dataValMap = map;
 
         m_thData = new ThreadLocal<OffHeapDataVal>() {
             @Override
             public OffHeapDataVal initialValue() {
-                return new OffHeapDataVal();
+                return new OffHeapDataVal(64);
             }
         };
     }
