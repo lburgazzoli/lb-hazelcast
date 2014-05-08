@@ -9,12 +9,12 @@ project.ext {
 }
 
 dependencies {
-    compile 'com.fasterxml.jackson.core:jackson-core:2.3.1'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.3.1'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.3.1'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.3.1'
-    compile 'com.fasterxml.jackson.module:jackson-module-afterburner:2.3.1'
-    compile 'com.nebhale.jsonpath:jsonpath:1.2'
+    compile "com.fasterxml.jackson.core:jackson-core:$versions.jackson"
+    compile "com.fasterxml.jackson.core:jackson-databind:$versions.jackson"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$versions.jackson"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:$versions.jackson"
+    compile "com.fasterxml.jackson.module:jackson-module-afterburner:$versions.jackson"
+    compile "com.nebhale.jsonpath:jsonpath:$versions.jsonpath"
 }
 
 jar {
