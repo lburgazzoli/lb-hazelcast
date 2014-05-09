@@ -56,15 +56,25 @@ public class HzPrefixedInstance implements HazelcastInstance {
     private static final Logger LOGGER = LoggerFactory.getLogger(HzPrefixedInstance.class);
 
     private final HazelcastInstance m_instance;
-    private String m_prefix;
+    private final String m_prefix;
 
     /**
      * c-tor
      *
-     * @param instance the hazeclast instamce
+     * @param instance the hazeclast instance
      */
     public HzPrefixedInstance(final HazelcastInstance instance) {
+        this(instance,null);
+    }
+    /**
+     * c-tor
+     *
+     * @param instance  the hazeclast instance
+     * @param prefix    the object prefix
+     */
+    public HzPrefixedInstance(final HazelcastInstance instance, String prefix) {
         m_instance = instance;
+        m_prefix = prefix;
     }
 
     /**
@@ -76,25 +86,19 @@ public class HzPrefixedInstance implements HazelcastInstance {
         this(Hazelcast.newHazelcastInstance(config));
     }
 
+    /**
+     * c-tor
+     *
+     * @param config    the Hazelcast config
+     * @param prefix    the object prefix
+     */
+    public HzPrefixedInstance(final Config config, String prefix) {
+        this(Hazelcast.newHazelcastInstance(config),prefix);
+    }
+
     // *************************************************************************
     //
     // *************************************************************************
-
-    /**
-     *
-     * @param prefix the name prefix
-     */
-    public void setPrefix(String prefix) {
-        m_prefix = prefix;
-    }
-
-    /**
-     *
-     * @return the name prefix
-     */
-    public String getPrefix() {
-        return m_prefix;
-    }
 
     /**
      *
