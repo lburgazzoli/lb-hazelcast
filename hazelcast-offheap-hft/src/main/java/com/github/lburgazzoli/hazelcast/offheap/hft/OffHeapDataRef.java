@@ -18,10 +18,6 @@ package com.github.lburgazzoli.hazelcast.offheap.hft;
 import com.hazelcast.nio.serialization.Data;
 import com.hazelcast.storage.DataRef;
 
-
-/**
- * @author lburgazzoli
- */
 public class OffHeapDataRef implements DataRef {
     private int m_type;
     private int m_size;
@@ -29,9 +25,6 @@ public class OffHeapDataRef implements DataRef {
     private int m_classId;
     private int m_version;
 
-    /**
-     * c-tor
-     */
     public OffHeapDataRef() {
         m_type      = -1;
         m_size      = -1;
@@ -40,11 +33,6 @@ public class OffHeapDataRef implements DataRef {
         m_version   = -1;
     }
 
-    /**
-     * c-tor
-     *
-     * @param data
-     */
     public OffHeapDataRef(Data data) {
         m_type = data.getType();
         m_size = data.getBuffer().length;
@@ -74,34 +62,18 @@ public class OffHeapDataRef implements DataRef {
     // Getters
     // *************************************************************************
 
-    /**
-     *
-     * @return
-     */
     public int getType() {
         return m_type;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getFactoryId() {
         return m_factoryId;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getClassId() {
         return m_classId;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getVersion() {
         return m_version;
     }

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.hazelcast.json.examples;
+package com.github.lburgazzoli.hazelcast.serialization.json.examples;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.lburgazzoli.hazelcast.json.serializer.PlainJsonSerializer;
+import com.github.lburgazzoli.hazelcast.serialization.json.PlainJsonSerializer;
 import com.hazelcast.config.*;
 import com.hazelcast.core.*;
 import com.hazelcast.query.Predicate;

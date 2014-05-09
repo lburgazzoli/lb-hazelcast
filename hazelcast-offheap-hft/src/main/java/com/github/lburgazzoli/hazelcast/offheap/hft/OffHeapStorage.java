@@ -28,9 +28,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Set;
 
-/**
- * @author lburgazzoli
- */
 public class OffHeapStorage implements Storage<DataRef> {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapStorage.class);
 
@@ -38,11 +35,6 @@ public class OffHeapStorage implements Storage<DataRef> {
     private final Set<ClassDefinition> m_defs;
     private final ThreadLocal<OffHeapDataVal> m_thData;
 
-    /**
-     * c-tor
-     *
-     * @param map
-     */
     public OffHeapStorage(final SharedHashMap<Integer,OffHeapDataVal> map) throws IOException {
         m_defs       = Sets.newConcurrentHashSet();
         m_dataValMap = map;
@@ -109,11 +101,6 @@ public class OffHeapStorage implements Storage<DataRef> {
     //
     // *************************************************************************
 
-    /**
-     *
-     * @param data
-     * @return
-     */
     private synchronized ClassDefinition getClassDefinition(OffHeapDataRef data) {
         for(ClassDefinition cd : m_defs) {
             if( cd.getClassId()   == data.getClassId()   &&

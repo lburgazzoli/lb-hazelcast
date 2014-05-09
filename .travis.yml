@@ -1,8 +1,11 @@
 language:
-  - java
-
+- java
 script:
-  - ./gradlew clean compileJava
-
+- "./gradlew clean compileJava"
+- "./gradlew :hazelcast-serialization-json:uploadArchives"
 jdk:
-  - oraclejdk7
+- oraclejdk8
+env:
+  global:
+  - secure: V29UeliEnGcDBsExqQsvDkij7nZP6vUsE9ABunZSohG07uMLOMQlG7LXeCtqZJ3UP5qfniYxOudvlpdLiEobtCubX4Y1D9057tVwLtW6UuQFU4lSqN9pIEA7roKAyfH6JWOEw6lWlQQtq483VQSg9kfg19mO+Y4ZjOstjIhcqck=
+  - secure: SRh2oopvhdtto2112Lqb1LzlmdaRjY3KcKq0sy3Jyin1nyd1cXnDd9y0mb+zVvCrvzc3mUwxRfV1dsok+wtLdYdoB+YsENfMFB+T/T2qlqxut2hLXrkVnxst2refSsnlV6jS4GJQ0VLZiJq25PqigEFkPMRAjnHGoEMXvptinSw=

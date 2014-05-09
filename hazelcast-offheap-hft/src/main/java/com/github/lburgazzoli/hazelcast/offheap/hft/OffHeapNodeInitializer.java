@@ -31,17 +31,11 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
 
-/**
- * @author lburgazzoli
- */
 public class OffHeapNodeInitializer extends DefaultNodeInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(OffHeapNodeInitializer.class);
 
     private Properties m_props;
 
-    /**
-     * c-tor
-     */
     public OffHeapNodeInitializer() {
         m_props = null;
     }
@@ -67,11 +61,6 @@ public class OffHeapNodeInitializer extends DefaultNodeInitializer {
         return super.getOffHeapStorage();
     }
 
-    /**
-     *
-     * @return
-     * @throws IOException
-     */
     public static SharedHashMap<Integer,OffHeapDataVal> getSharedHashMap(Properties props) throws IOException {
 
         SharedHashMapBuilder shmb = new SharedHashMapBuilder();

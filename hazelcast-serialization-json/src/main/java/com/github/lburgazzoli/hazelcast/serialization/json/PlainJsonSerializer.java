@@ -13,28 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.hazelcast.json.serializer;
+package com.github.lburgazzoli.hazelcast.serialization.json;
 
-import com.fasterxml.jackson.dataformat.smile.SmileFactory;
- 
 /**
  *
  */
-public class BinaryJsonSerializer<T> extends JsonSerializer<T> {
+public class PlainJsonSerializer<T> extends JsonSerializer<T> {
 
-    /**
-     * c-tor
-     */
-    public BinaryJsonSerializer(Class<T> type) {
-        super(type, JsonSerializationConstants.TYPEID_BINARY,new SmileFactory());
+    public PlainJsonSerializer(final Class<T> type) {
+        super(type, JsonSerializationConstants.TYPEID_PLAIN);
     }
 
-    /**
-     *
-     * @param type
-     * @return
-     */
-    public static <V> BinaryJsonSerializer<V> make(Class<V> type) {
-        return new BinaryJsonSerializer<V>(type);
+    public static <V> PlainJsonSerializer<V> make(final Class<V> type) {
+        return new PlainJsonSerializer<V>(type);
     }
 }

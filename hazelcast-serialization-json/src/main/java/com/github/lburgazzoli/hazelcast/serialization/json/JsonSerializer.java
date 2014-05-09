@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.hazelcast.json.serializer;
+package com.github.lburgazzoli.hazelcast.serialization.json;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,34 +21,18 @@ import com.hazelcast.nio.serialization.ByteArraySerializer;
 
 import java.io.IOException;
 
-/**
- *
- */
 public class JsonSerializer<T> implements ByteArraySerializer<T> {
 
     private final ObjectMapper m_mapper;
     private final Class<T> m_type;
     private final int m_typeId;
 
-    /**
-     * c-tor
-     *
-     * @param type
-     * @param typeId
-     */
     public JsonSerializer(Class<T> type, int typeId) {
         m_type = type;
         m_typeId = typeId;
         m_mapper = new ObjectMapper();
     }
 
-    /**
-     * c-tor
-     *
-     * @param type
-     * @param typeId
-     * @param factory
-     */
     public JsonSerializer(Class<T> type, int typeId, JsonFactory factory) {
         m_type = type;
         m_typeId = typeId;

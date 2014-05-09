@@ -18,28 +18,15 @@ package com.github.lburgazzoli.hazelcast.offheap.hft;
 import net.openhft.lang.io.Bytes;
 import net.openhft.lang.model.Byteable;
 
-/**
- * @author lburgazzoli
- *
- * TODO: record lock
- */
 public class OffHeapDataVal implements Byteable {
     private Bytes m_bytes;
     private long m_offset;
     private final int m_size;
 
-    /**
-     * c-tor
-     */
     public OffHeapDataVal() {
         this(256);
     }
 
-    /**
-     * c-tor
-     *
-     * @param size
-     */
     public OffHeapDataVal(int size) {
         m_bytes = null;
         m_offset = 0;

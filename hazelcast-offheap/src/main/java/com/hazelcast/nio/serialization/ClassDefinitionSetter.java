@@ -23,10 +23,6 @@ package com.hazelcast.nio.serialization;
  * - src/main/java/com/hazelcast/nio/serialization/ClassDefinitionSetter.java
  */
 public class ClassDefinitionSetter {
-    /**
-     * @param definition
-     * @param data
-     */
     public static Data setClassDefinition(ClassDefinition definition, Data data) {
         data.classDefinition = definition;
         return data;

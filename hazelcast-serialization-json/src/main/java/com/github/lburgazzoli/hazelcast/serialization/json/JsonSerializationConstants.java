@@ -13,26 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.hazelcast.json.serializer;
+package com.github.lburgazzoli.hazelcast.serialization.json;
 
-/**
- *
- */
-public class PlainJsonSerializer<T> extends JsonSerializer<T> {
-
-    /**
-     * c-tor
-     */
-    public PlainJsonSerializer(Class<T> type) {
-        super(type, JsonSerializationConstants.TYPEID_PLAIN);
-    }
-
-    /**
-     *
-     * @param type
-     * @return
-     */
-    public static <V> PlainJsonSerializer<V> make(Class<V> type) {
-        return new PlainJsonSerializer<V>(type);
-    }
+public class JsonSerializationConstants {
+    public static final int TYPEID_PLAIN  = 100;
+    public static final int TYPEID_BINARY = 101;
 }
