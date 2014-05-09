@@ -1,18 +1,11 @@
 project.ext {
     bundleImportPackages = [
-        '*'
+            '*'
     ]
 
     bundleExportPackages = [
-        "*"
+            "*"
     ]
-}
-
-dependencies {
-    compile project(':hazelcast-common')
-    compile project(":hazelcast-offheap")
-    compile "net.openhft:lang:$versions.openhftLang"
-    compile "net.openhft:collections:$versions.openhftCollection"
 }
 
 jar {
