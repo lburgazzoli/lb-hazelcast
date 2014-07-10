@@ -24,7 +24,7 @@ subprojects {
     apply plugin: 'osgi'
     apply plugin: 'nexus'
 
-    version             = '1.0.0.SNAPSHOT'
+    version             = '1.0.0-SNAPSHOT'
     group               = 'com.github.lburgazzoli'
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
@@ -33,15 +33,15 @@ subprojects {
         gradleVersion   = '2.0'
         gradleScriptDir = "${rootProject.projectDir}/gradle"
 
-		if(!project.hasProperty('nexusUsername') && !project.hasProperty('nexusPassword')) {
-			if(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
-				nexusUsername = sonatypeUsername
-				nexusPassword = sonatypePassword
-			} else {
-				nexusUsername = "$System.env.CI_DEPLOY_USERNAME"
-				nexusPassword = "$System.env.CI_DEPLOY_PASSWORD"
-			}
-		}
+        if(!project.hasProperty('nexusUsername') && !project.hasProperty('nexusPassword')) {
+            if(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
+                nexusUsername = sonatypeUsername
+                nexusPassword = sonatypePassword
+            } else {
+                nexusUsername = "$System.env.CI_DEPLOY_USERNAME"
+                nexusPassword = "$System.env.CI_DEPLOY_PASSWORD"
+            }
+        }
 
         prefix           = 'lb'
         isReleaseVersion = !version.endsWith("SNAPSHOT")
@@ -96,12 +96,12 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-		
+        
         maven { url 'http://repo.springsource.org/release' }
         maven { url 'https://oss.sonatype.org/content/repositories/releases' }
-		maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
-	
+    
     dependencies {
         compile "org.slf4j:slf4j-api:$versions.slf4j"        
 
@@ -116,12 +116,12 @@ subprojects {
         compile "com.hazelcast:hazelcast-all:$versions.hazelcast"
 
         testCompile "junit:junit:$versions.junit"
-		
-		runtime "org.slf4j:slf4j-ext:$versions.slf4j"
+        
+        runtime "org.slf4j:slf4j-ext:$versions.slf4j"
         runtime "org.slf4j:jul-to-slf4j:$versions.slf4j"
         runtime "org.slf4j:jcl-over-slf4j:$versions.slf4j"
         runtime "ch.qos.logback:logback-core:$versions.logback"
-		runtime "ch.qos.logback:logback-classic:$versions.logback"
+        runtime "ch.qos.logback:logback-classic:$versions.logback"
     }
 
     test {
@@ -146,7 +146,7 @@ subprojects {
         manifest.attributes['Bundle-Description'     ] = "${project.prefix} :: ${project.name}"
         manifest.attributes['Bundle-Name'            ] = "${project.prefix} :: ${project.name}"
         manifest.attributes['Bundle-SymbolicName'    ] = "${project.group}-${project.prefix}-${project.name}"
-        manifest.attributes['Bundle-Version'         ] = project.version
+        manifest.attributes['Bundle-Version'         ] = project.version.replaceAll('-','.')
         manifest.attributes['Implementation-Title'   ] = "${project.group}-${project.prefix}-${project.name}-${project.version}"
         manifest.attributes['Implementation-Version' ] = project.version
         manifest.attributes['Implementation-Vendor'  ] = 'lb'
@@ -168,26 +168,26 @@ subprojects {
 
     modifyPom {
         project {
-			name          = "${project.prefix}-${project.name}"
-			description   = "${project.prefix}-${project.name}"
-			url           = "${project.gitProject}"
-			packaging     = 'jar'
+            name          = "${project.prefix}-${project.name}"
+            description   = "${project.prefix}-${project.name}"
+            url           = "${project.gitProject}"
+            packaging     = 'jar'
 
-			licenses {
-				license {
-					name         = "The Apache Software License, Version 2.0"
-					url          = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-					distribution = "repo"
-				}
-			}
+            licenses {
+                license {
+                    name         = "The Apache Software License, Version 2.0"
+                    url          = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    distribution = "repo"
+                }
+            }
 
-			scm {
-				url                 = "${project.gitProject}"
-				connection          = "scm:git:${project.gitProject}.git"
-				developerConnection = "scm:git:${project.gitProject}.git"
-			}
-		}
-	}
+            scm {
+                url                 = "${project.gitProject}"
+                connection          = "scm:git:${project.gitProject}.git"
+                developerConnection = "scm:git:${project.gitProject}.git"
+            }
+        }
+    }
 }
 
 // *****************************************************************************
