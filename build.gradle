@@ -24,7 +24,7 @@ subprojects {
     apply plugin: 'osgi'
     apply plugin: 'nexus'
 
-    version             = '1.0.0-SNAPSHOT'
+    version             = '1.0.0.SNAPSHOT'
     group               = 'com.github.lburgazzoli'
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
