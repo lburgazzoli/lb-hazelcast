@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 lb
+ * Copyright 2014 lburgazzoli
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ public class HzPrefixedInstance implements HazelcastInstance {
      * @param instance  the hazeclast instance
      * @param prefix    the object prefix
      */
-    public HzPrefixedInstance(final HazelcastInstance instance, String prefix) {
+    public HzPrefixedInstance(final HazelcastInstance instance, final String prefix) {
         m_instance = instance;
         m_prefix = prefix;
     }
@@ -296,7 +296,7 @@ public class HzPrefixedInstance implements HazelcastInstance {
      * @param type  the distributed object type
      * @return      the distributed objects
      */
-    public Collection<DistributedObject> getDistributedObjects(Class<?> type) {
+    public Collection<DistributedObject> getDistributedObjects(final Class<?> type) {
         Collection<DistributedObject> rv = Lists.newArrayList();
         for(DistributedObject object : m_instance.getDistributedObjects()) {
             if(type == null) {

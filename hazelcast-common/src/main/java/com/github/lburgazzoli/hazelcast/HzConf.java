@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 lb
+ * Copyright 2014 lburgazzoli
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,13 +27,17 @@ import java.util.Set;
 public class HzConf extends Config {
     private static final Logger LOGGER = LoggerFactory.getLogger(HzConf.class);
 
-    private String m_prefix;
+    private final String m_prefix;
 
     public HzConf() {
+        this(null);
+    } 	
+	
+	public HzConf(final String prefix) {
         super();
         super.setProperty("hazelcast.logging.type","slf4j");
 
-        m_prefix = null;
+        m_prefix = prefix;
     }
 
     // *************************************************************************
