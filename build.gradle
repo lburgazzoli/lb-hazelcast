@@ -164,7 +164,7 @@ subprojects {
     nexus {
         attachJavadoc         = true
         attachSources         = true
-        attachTests           = true
+        attachTests           = false
         sign                  = false
         repositoryUrl         = deployRelease
         snapshotRepositoryUrl = deploySnapshot
