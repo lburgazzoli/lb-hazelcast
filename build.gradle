@@ -24,7 +24,7 @@ subprojects {
     apply plugin: 'osgi'
     apply plugin: 'nexus'
 
-    version             = '1.0.0.SNAPSHOT'
+    version             = '1.0.0-SNAPSHOT'
     group               = 'com.github.lburgazzoli'
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
@@ -47,8 +47,6 @@ subprojects {
         isReleaseVersion = !version.endsWith("SNAPSHOT")
         gitRoot          = "https://github.com/lburgazzoli"
         gitProject       = "https://github.com/lburgazzoli/lb-hazelcast"
-		deployRelease    = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-        deploySnapshot   = "https://oss.sonatype.org/content/repositories/snapshots"
 
         versions = [
             slf4j             : '1.7.5',
@@ -166,8 +164,6 @@ subprojects {
         attachSources         = true
         attachTests           = false
         sign                  = false
-        repositoryUrl         = deployRelease
-        snapshotRepositoryUrl = deploySnapshot
     }
 
     modifyPom {
