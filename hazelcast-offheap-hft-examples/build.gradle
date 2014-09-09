@@ -1,7 +1,0 @@
-
-dependencies {
-    compile project(':hazelcast-common')
-    compile project(':hazelcast-offheap')
-    compile project(':hazelcast-offheap-hft')
-}
-

@@ -1,6 +1,3 @@
 include "hazelcast-common"
 include "hazelcast-serialization-json"
 include "hazelcast-serialization-json-examples"
-include "hazelcast-offheap"
-include "hazelcast-offheap-hft"
-include "hazelcast-offheap-hft-examples"
