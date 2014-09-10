@@ -38,6 +38,7 @@ import com.hazelcast.core.ITopic;
 import com.hazelcast.core.IdGenerator;
 import com.hazelcast.core.LifecycleService;
 import com.hazelcast.core.MultiMap;
+import com.hazelcast.core.ReplicatedMap;
 import com.hazelcast.core.PartitionService;
 import com.hazelcast.logging.LoggingService;
 import com.hazelcast.mapreduce.JobTracker;
@@ -143,6 +144,11 @@ public class HzPrefixedInstance implements HazelcastInstance {
     @Override
     public <K, V> IMap<K, V> getMap(String name) {
         return m_instance.getMap(getPrefix(name));
+    }
+
+    @Override
+    public <K, V> ReplicatedMap<K, V> getReplicatedMap(String name) {
+        return m_instance.getReplicatedMap(getPrefix(name));
     }
 
     @Override
