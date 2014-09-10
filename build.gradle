@@ -28,7 +28,7 @@ subprojects {
     apply plugin: 'nexus'
     apply plugin: 'com.github.ben-manes.versions'
 
-    version             = '1.0.0-SNAPSHOT'
+    version             = '3.3.0-SNAPSHOT'
     group               = 'com.github.lburgazzoli'
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
