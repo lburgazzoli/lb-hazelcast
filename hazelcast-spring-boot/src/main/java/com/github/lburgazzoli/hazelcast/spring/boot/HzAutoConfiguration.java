@@ -15,19 +15,31 @@
  */
 package com.github.lburgazzoli.hazelcast.spring.boot;
 
+import com.hazelcast.config.MulticastConfig;
 import com.hazelcast.core.HazelcastInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.env.Environment;
 
-import javax.annotation.PreDestroy;
 
 @Configuration
+@EnableAutoConfiguration
 @ConditionalOnClass(HazelcastInstance.class)
+@Import(HzMulticastConfiguration.class)
 //@EnableConfigurationProperties(MongoProperties.class)
 //@ConditionalOnMissingBean(MongoDbFactory.class)
 public class HzAutoConfiguration {
+
+    @Autowired
+    Environment env;
+
+    /*
     private HazelcastInstance hz;
 
     @PreDestroy
@@ -38,9 +50,17 @@ public class HzAutoConfiguration {
     }
 
     @Bean
-    @Scope("singleton")
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
     public HazelcastInstance hazelcast()  {
+
         this.hz = null; //this.properties.createMongoClient(this.options);
         return this.hz;
+    }
+    */
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
+    public HzMulticastConfiguration multicastConfig() {
+        return new HzMulticastConfiguration();
     }
 }

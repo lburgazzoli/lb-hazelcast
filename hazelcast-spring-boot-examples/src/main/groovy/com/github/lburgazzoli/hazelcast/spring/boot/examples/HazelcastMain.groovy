@@ -15,6 +15,7 @@
  */
 package com.github.lburgazzoli.hazelcast.spring.boot.examples
 
+import com.github.lburgazzoli.hazelcast.spring.boot.HzMulticastConfiguration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
@@ -28,7 +29,8 @@ class HazelcastMain {
 
     public static void main(String[] args) {
         def ctx = SpringApplication.run(HazelcastMain.class,args)
-        //LOGGER.info("app: {} ",ctx.getBean(Application.class))
+        LOGGER.info("app: {} ",ctx.getBean(HzMulticastConfiguration.class))
+
         ctx.close();
     }
 }

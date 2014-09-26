@@ -125,8 +125,9 @@ subprojects {
         compile "org.apache.commons:commons-collections4:$versions.commonsCollections"
         compile "com.goldmansachs:gs-collections:$versions.gsCollections"
 
-        compile "org.codehaus.groovy:groovy:$versions.groovy"
+        compile "org.codehaus.groovy:groovy-all:$versions.groovy"
         compile "com.hazelcast:hazelcast-all:$versions.hazelcast"
+        compile "javax.inject:javax.inject:1"
 
         testCompile "junit:junit:$versions.junit"
     }
