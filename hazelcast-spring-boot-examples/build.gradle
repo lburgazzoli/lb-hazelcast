@@ -1,0 +1,9 @@
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile project(':hazelcast-common')
+    compile project(':hazelcast-spring-boot')
+
+    compile "org.springframework.boot:spring-boot:$versions.springBoot"
+    compile "org.springframework.boot:spring-boot-autoconfigure:$versions.springBoot"
+}

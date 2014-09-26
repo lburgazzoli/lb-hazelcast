@@ -20,7 +20,7 @@ import com.fasterxml.jackson.dataformat.smile.SmileFactory;
 public class BinaryJsonSerializer<T> extends JsonSerializer<T> {
 
     public BinaryJsonSerializer(final Class<T> type) {
-        super(type, JsonSerializationConstants.TYPEID_BINARY,new SmileFactory());
+        super(type, JsonSerializationConstants.TYPEID_BINARY, new SmileFactory());
     }
 
     public static <V> BinaryJsonSerializer<V> make(final Class<V> type) {

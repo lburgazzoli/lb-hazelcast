@@ -15,9 +15,7 @@
  */
 package com.github.lburgazzoli.hazelcast.serialization.json;
 
-/**
- *
- */
+
 public class PlainJsonSerializer<T> extends JsonSerializer<T> {
 
     public PlainJsonSerializer(final Class<T> type) {

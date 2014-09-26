@@ -30,9 +30,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
-/**
- *
- */
 public final class Example01 {
     private static final Logger LOGGER = LoggerFactory.getLogger(Example01.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();

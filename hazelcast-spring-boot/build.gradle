@@ -1,0 +1,10 @@
+
+dependencies {
+    compile project(':hazelcast-common')
+
+    compile "org.springframework.boot:spring-boot:$versions.springBoot"
+    compile "org.springframework.boot:spring-boot-autoconfigure:$versions.springBoot"
+    compile("org.springframework:spring-core:$versions.spring") {
+        exclude group:'commons-logging', module:'commons-logging'
+    }
+}

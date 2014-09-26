@@ -7,11 +7,15 @@ buildscript {
         mavenCentral()
         mavenLocal()
         jcenter()
+
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
     }
 
     dependencies {
         classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.5'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.0.BUILD-SNAPSHOT'
     }
 }
 
@@ -67,6 +71,7 @@ subprojects {
             springDataJpa     : '1.7.0.RELEASE',
             springReactor     : '1.1.4.RELEASE',
             springIntegration : '4.0.4.RELEASE',
+            springBoot        : '1.2.0.BUILD-SNAPSHOT',
             junit             : '4.11',
             kryo              : '2.23.0',
             disruptor         : '3.3.0',
@@ -95,8 +100,10 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        
-        maven { url 'http://repo.springsource.org/release' }
+
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+
         maven { url 'https://oss.sonatype.org/content/repositories/releases' }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
