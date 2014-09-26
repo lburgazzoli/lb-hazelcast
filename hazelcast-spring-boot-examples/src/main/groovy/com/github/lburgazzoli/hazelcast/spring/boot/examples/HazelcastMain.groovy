@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 lb
+ * Copyright 2014 lburgazzoli
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,12 @@
  */
 package com.github.lburgazzoli.hazelcast.spring.boot.examples
 
+import com.github.lburgazzoli.hazelcast.spring.boot.HzAutoConfiguration
 import com.github.lburgazzoli.hazelcast.spring.boot.HzMulticastConfiguration
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
+
 
 class HazelcastMain {
     private static final Logger LOGGER = LoggerFactory.getLogger(HazelcastMain.class)
@@ -28,8 +30,8 @@ class HazelcastMain {
     // *************************************************************************
 
     public static void main(String[] args) {
-        def ctx = SpringApplication.run(HazelcastMain.class,args)
-        LOGGER.info("app: {} ",ctx.getBean(HzMulticastConfiguration.class))
+        def ctx = SpringApplication.run(HzAutoConfiguration.class,args)
+        LOGGER.info("app: {} ", ctx.getBean(HzMulticastConfiguration.class))
 
         ctx.close();
     }
