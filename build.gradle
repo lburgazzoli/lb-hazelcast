@@ -10,7 +10,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.bmuschko:gradle-nexus-plugin:2.0'
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.2'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.6'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.0.RELEASE'
     }
@@ -161,10 +161,13 @@ subprojects {
     // *************************************************************************
 
     nexus {
-        attachJavadoc     = true
-        attachSources     = true
-        attachTests       = false
-        sign              = false
+        sign    = false
+    }
+
+    extraArchive {
+        javadoc = true
+        sources = true
+        tests   = false
     }
 
     modifyPom {
