@@ -4,6 +4,8 @@ language:
 script:
 - "./gradlew clean compileJava"
 - "./gradlew :hazelcast-common:uploadArchives"
+- "./gradlew :hazelcast-serialization:uploadArchives"
+- "./gradlew :hazelcast-serialization-fst:uploadArchives"
 - "./gradlew :hazelcast-serialization-json:uploadArchives"
 
 jdk:
