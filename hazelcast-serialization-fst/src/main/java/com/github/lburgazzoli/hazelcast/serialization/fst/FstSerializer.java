@@ -52,18 +52,16 @@ public final class FstSerializer<T> extends HzSerializer<T> implements StreamSer
         fstout.flush();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public T read(ObjectDataInput in) throws IOException {
         FSTObjectInput fstin = m_fstConf.get().getObjectInput((InputStream)in);
-        T result = null;
 
         try {
-            result = (T)fstin.readObject();
+            return (T)fstin.readObject();
         } catch(Exception e) {
             throw new IOException(e);
         }
-
-        return result;
     }
 
     // *************************************************************************
