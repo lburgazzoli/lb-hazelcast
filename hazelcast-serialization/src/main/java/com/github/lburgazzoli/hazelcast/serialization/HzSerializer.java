@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 lb
+ * Copyright 2014 Luca Burgazzoli
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.hazelcast.serialization.json;
+package com.github.lburgazzoli.hazelcast.serialization;
 
+import com.hazelcast.nio.serialization.Serializer;
 
-public class PlainJsonSerializer<T> extends JsonSerializer<T> {
+public class HzSerializer<T> implements Serializer {
+    protected final Class<T> m_type;
+    protected final int m_typeId;
 
-    public PlainJsonSerializer(final Class<T> type) {
-        super(type, JsonSerializationConstants.TYPEID_PLAIN);
+    protected HzSerializer(final Class<T> type, int typeId) {
+        m_type   = type;
+        m_typeId = typeId;
     }
 
-    public static <V> PlainJsonSerializer<V> make(final Class<V> type) {
-        return new PlainJsonSerializer<V>(type);
+    @Override
+    public int getTypeId() {
+        return m_typeId;
+    }
+
+    @Override
+    public void destroy() {
+    }
+
+    public Class<T> getType() {
+        return m_type;
     }
 }

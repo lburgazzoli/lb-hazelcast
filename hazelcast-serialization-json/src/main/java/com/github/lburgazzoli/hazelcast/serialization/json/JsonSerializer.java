@@ -17,35 +17,23 @@ package com.github.lburgazzoli.hazelcast.serialization.json;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.smile.SmileFactory;
+import com.github.lburgazzoli.hazelcast.serialization.HzSerializationConstants;
+import com.github.lburgazzoli.hazelcast.serialization.HzSerializer;
 import com.hazelcast.nio.serialization.ByteArraySerializer;
 
 import java.io.IOException;
 
-public class JsonSerializer<T> implements ByteArraySerializer<T> {
-
+public final class JsonSerializer<T> extends HzSerializer<T> implements ByteArraySerializer<T> {
     private final ObjectMapper m_mapper;
-    private final Class<T> m_type;
-    private final int m_typeId;
 
-    public JsonSerializer(Class<T> type, int typeId) {
-        m_type = type;
-        m_typeId = typeId;
-        m_mapper = new ObjectMapper();
+    private JsonSerializer(Class<T> type, int typeId) {
+        this(type, typeId, null);
     }
 
-    public JsonSerializer(Class<T> type, int typeId, JsonFactory factory) {
-        m_type = type;
-        m_typeId = typeId;
+    private JsonSerializer(Class<T> type, int typeId, final JsonFactory factory) {
+        super(type, typeId);
         m_mapper = new ObjectMapper(factory);
-    }
-
-    @Override
-    public int getTypeId() {
-        return m_typeId;
-    }
-
-    @Override
-    public void destroy() {
     }
 
     @Override
@@ -55,6 +43,25 @@ public class JsonSerializer<T> implements ByteArraySerializer<T> {
 
     @Override
     public T read(byte[] bytes) throws IOException {
-        return m_mapper.readValue(bytes, m_type);
+        return m_mapper.readValue(bytes, getType());
+    }
+
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    public static <V> JsonSerializer<V> makeBinary(final Class<V> type) {
+        return new JsonSerializer<V>(
+            type,
+            HzSerializationConstants.TYPEID_JSON_BINARY,
+            new SmileFactory()
+        );
+    }
+
+    public static <V> JsonSerializer<V> makePlain(final Class<V> type) {
+        return new JsonSerializer<V>(
+            type,
+            HzSerializationConstants.TYPEID_JSON_PLAIN
+        );
     }
 }

@@ -11,3 +11,5 @@ build
 out
 classes
 
+atlassian-ide-plugin.xml
+

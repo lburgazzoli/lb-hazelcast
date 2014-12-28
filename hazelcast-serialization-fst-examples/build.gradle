@@ -1,0 +1,7 @@
+
+dependencies {
+    compile project(':hazelcast-common')
+    compile project(':hazelcast-serialization')
+    compile project(':hazelcast-serialization-fst')
+}
+

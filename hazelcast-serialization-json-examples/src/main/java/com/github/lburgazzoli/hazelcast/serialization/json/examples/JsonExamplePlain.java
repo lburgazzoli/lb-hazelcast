@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 lb
+ * Copyright 2014 Luca Burgazzoli
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.github.lburgazzoli.hazelcast.serialization.json.examples;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.lburgazzoli.hazelcast.serialization.json.PlainJsonSerializer;
+import com.github.lburgazzoli.hazelcast.serialization.json.JsonSerializer;
 import com.hazelcast.config.*;
 import com.hazelcast.core.*;
 import com.hazelcast.query.Predicate;
@@ -30,23 +30,17 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
-public final class Example01 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Example01.class);
+public final class JsonExamplePlain {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JsonExamplePlain.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     // *************************************************************************
     //
     // *************************************************************************
 
-    /**
-     *
-     */
     private static class SimpleThresholdPredicate implements Predicate<String,JsonNode> {
         private final int m_threshold;
 
-        /**
-         * c-tor
-         */
         public SimpleThresholdPredicate(int threshold) {
             m_threshold = threshold;
         }
@@ -58,22 +52,16 @@ public final class Example01 {
         }
     }
 
-    /**
-     *
-     */
     private static class SimpleEntryListener extends EntryAdapter<String, JsonNode> {
         private final String m_id;
 
-        /**
-         * c-tor
-         */
         public SimpleEntryListener(String id) {
             m_id = id;
         }
 
         public void entryAdded(EntryEvent<String, JsonNode> event) {
             try {
-                LOGGER.debug("{} - {} => {}",
+                LOGGER.info("{} - {} => {}",
                     m_id,
                     event.getKey(),
                     MAPPER.writeValueAsString(event.getValue()));
@@ -87,17 +75,14 @@ public final class Example01 {
     //
     // *************************************************************************
 
-    /**
-     *
-     */
     private HazelcastInstance newHzInstance() {
         Config cfg = new Config();
-        cfg.setProperty("hazelcast.logging.type","slf4j");
+        cfg.setProperty("hazelcast.logging.type","log4j2");
 
         cfg.getSerializationConfig().getSerializerConfigs().add(
             new SerializerConfig()
                 .setTypeClass(ObjectNode.class)
-                .setImplementation(PlainJsonSerializer.make(JsonNode.class))
+                .setImplementation(JsonSerializer.makePlain(JsonNode.class))
         );
 
         NetworkConfig network = cfg.getNetworkConfig();
@@ -116,10 +101,6 @@ public final class Example01 {
         return Hazelcast.newHazelcastInstance(cfg);
     }
 
-    /**
-     *
-     * @throws Exception
-     */
     private void run() throws Exception {
         IMap<String,JsonNode> m1 = newHzInstance().getMap("map.json");
         IMap<String,JsonNode> m2 = newHzInstance().getMap("map.json");
@@ -161,7 +142,7 @@ public final class Example01 {
 
     public static void main(String[] args) {
         try {
-            new Example01().run();
+            new JsonExamplePlain().run();
         } catch (Exception e) {
             LOGGER.warn("Exception",e);
         }
