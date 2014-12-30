@@ -12,7 +12,7 @@ dependencies {
     compile project(':hazelcast-common')
     compile project(':hazelcast-serialization')
 
-    compile "com.esotericsoftware.kryo:kryo:$versions.kryo"
+    compile "com.esotericsoftware:kryo:$versions.kryo"
 }
 
 jar {

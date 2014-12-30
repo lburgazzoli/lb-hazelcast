@@ -47,25 +47,16 @@ public final class KryoSerializer<T> extends HzSerializer<T, Kryo> implements St
     }
 
     @Override
-    public void write(ObjectDataOutput out, T object) throws IOException {
-        try(Output output = new UnsafeOutput((OutputStream) out)) {
-            get().writeObject(output, object);
-            output.flush();
-            output.close();
-        }
+    public void write(ObjectDataOutput objectDataOutput, T object) throws IOException {
+        final Output output = new UnsafeOutput((OutputStream) objectDataOutput);
+        get().writeObject(output, object);
+        output.flush();
     }
 
     @Override
-    public T read(ObjectDataInput in) throws IOException {
-        T object = null;
-
-        try(final Input input = new UnsafeInput((InputStream) in)) {
-            object = get().readObject(input, getType());
-            input.close();
-        }
-
-
-        return object;
+    public T read(ObjectDataInput objectDataInput) throws IOException {
+        final InputStream in = (InputStream) objectDataInput;
+        return get().readObject(new UnsafeInput(in), getType());
     }
 
     // *************************************************************************

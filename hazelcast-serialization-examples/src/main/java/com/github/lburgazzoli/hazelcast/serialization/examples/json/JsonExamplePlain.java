@@ -40,8 +40,9 @@ import java.util.Map;
 import java.util.Random;
 
 public final class JsonExamplePlain {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonExamplePlain.class);
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final Logger       LOGGER   = LoggerFactory.getLogger(JsonExamplePlain.class);
+    private static final String       MAP_NAME = "map.json";
+    private static final ObjectMapper MAPPER   = new ObjectMapper();
 
     // *************************************************************************
     //
@@ -102,7 +103,7 @@ public final class JsonExamplePlain {
         network.getInterfaces().setEnabled(false);
 
         MapConfig mapCfg = new MapConfig();
-        mapCfg.setName("map.json");
+        mapCfg.setName(MAP_NAME);
         mapCfg.setInMemoryFormat(InMemoryFormat.OBJECT);
 
         cfg.addMapConfig(mapCfg);
@@ -111,8 +112,8 @@ public final class JsonExamplePlain {
     }
 
     private void run() throws Exception {
-        IMap<String,JsonNode> m1 = newHzInstance().getMap("map.json");
-        IMap<String,JsonNode> m2 = newHzInstance().getMap("map.json");
+        IMap<String,JsonNode> m1 = newHzInstance().getMap(MAP_NAME);
+        IMap<String,JsonNode> m2 = newHzInstance().getMap(MAP_NAME);
 
         m2.addEntryListener(
             new SimpleEntryListener("all"),

@@ -44,19 +44,19 @@ public final class FstSerializer<T> extends HzSerializer<T, FSTConfiguration> im
     }
 
     @Override
-    public void write(ObjectDataOutput out, T object) throws IOException {
-        FSTObjectOutput fstout = get().getObjectOutput((OutputStream) out);
-        fstout.writeObject(object);
-        fstout.flush();
+    public void write(ObjectDataOutput objectDataOutput, T object) throws IOException {
+        FSTObjectOutput out = get().getObjectOutput((OutputStream) objectDataOutput);
+        out.writeObject(object);
+        out.flush();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public T read(ObjectDataInput in) throws IOException {
-        FSTObjectInput fstin = get().getObjectInput((InputStream)in);
+    public T read(ObjectDataInput objectDataInput) throws IOException {
+        FSTObjectInput in = get().getObjectInput((InputStream)objectDataInput);
 
         try {
-            return (T)fstin.readObject();
+            return (T)in.readObject();
         } catch(Exception e) {
             throw new IOException(e);
         }

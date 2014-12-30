@@ -43,10 +43,9 @@ public final class JsonSerializer<T> extends HzSerializer<T, ObjectMapper> imple
         return get().writeValueAsBytes(object);
     }
 
-    @SuppressWarnings("uncheked")
     @Override
     public T read(byte[] bytes) throws IOException {
-        return (T)get().readValue(bytes, getType());
+        return get().readValue(bytes, getType());
     }
 
     // *************************************************************************

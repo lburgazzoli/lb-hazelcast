@@ -67,7 +67,7 @@ subprojects {
             spring             : '4.1.3.RELEASE',
             springBoot         : '1.2.0.RELEASE',
             junit              : '4.12',
-            kryo               : '2.23.0',
+            kryo               : '3.0.0',
             disruptor          : '3.3.0',
             gsCollections      : '5.1.0',
             groovy             : '2.3.9',

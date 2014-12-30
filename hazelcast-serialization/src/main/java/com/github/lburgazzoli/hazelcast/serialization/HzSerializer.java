@@ -25,13 +25,13 @@ public class HzSerializer<T,S> implements Serializer, Supplier<S> {
     protected final ThreadLocal<S> m_threadLocal;
 
     protected HzSerializer(final Class<T> type, int typeId) {
-        this(type, typeId, () -> null );
+        this(type, typeId, null );
     }
 
     protected HzSerializer(final Class<T> type, int typeId, Supplier<? extends S> supplier) {
         m_type        = type;
         m_typeId      = typeId;
-        m_threadLocal = ThreadLocal.withInitial(supplier);
+        m_threadLocal = supplier != null ? ThreadLocal.withInitial(supplier) : null;
     }
 
     @Override

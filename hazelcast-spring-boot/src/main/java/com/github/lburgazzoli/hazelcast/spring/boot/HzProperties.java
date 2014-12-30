@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.HashMap;
 import java.util.Map;
 
-@ConfigurationProperties(prefix = "hx")
+@ConfigurationProperties(prefix = "hz")
 public class HzProperties {
     private Map<String, String> properties = new HashMap<String, String>();
 }
