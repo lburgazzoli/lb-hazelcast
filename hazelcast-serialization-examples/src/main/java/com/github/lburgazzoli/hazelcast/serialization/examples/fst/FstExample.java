@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.hazelcast.serialization.fst.examples;
+package com.github.lburgazzoli.hazelcast.serialization.examples.fst;
 
 
 import com.github.lburgazzoli.hazelcast.serialization.fst.FstSerializer;
@@ -33,7 +33,8 @@ import org.slf4j.LoggerFactory;
 
 
 public final class FstExample {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FstExample.class);
+    private static final Logger LOGGER   = LoggerFactory.getLogger(FstExample.class);
+    private static final String MAP_NAME = "map.fst";
 
     // *************************************************************************
     //
@@ -74,13 +75,13 @@ public final class FstExample {
 
         NetworkConfig network = cfg.getNetworkConfig();
         JoinConfig join = network.getJoin();
-        join.getMulticastConfig().setEnabled(true);
+        join.getMulticastConfig().setEnabled(false);
         join.getTcpIpConfig().setEnabled(false);
 
         network.getInterfaces().setEnabled(false);
 
         MapConfig mapCfg = new MapConfig();
-        mapCfg.setName("map.fst");
+        mapCfg.setName(MAP_NAME);
         mapCfg.setInMemoryFormat(InMemoryFormat.OBJECT);
 
         cfg.addMapConfig(mapCfg);
@@ -89,7 +90,7 @@ public final class FstExample {
     }
 
     private void run() throws Exception {
-        IMap<String,FstCustomer> m1 = newHzInstance().getMap("map.fst");
+        IMap<String,FstCustomer> m1 = newHzInstance().getMap(MAP_NAME);
         m1.addEntryListener(
             new SimpleEntryListener("all"),
             true);

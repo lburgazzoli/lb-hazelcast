@@ -1,6 +1,0 @@
-
-dependencies {
-    compile project(':hazelcast-common')
-    compile project(':hazelcast-serialization-json')
-}
-

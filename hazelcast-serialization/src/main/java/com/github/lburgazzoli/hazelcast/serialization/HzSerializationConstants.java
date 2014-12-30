@@ -19,4 +19,5 @@ public class HzSerializationConstants {
     public static final int TYPEID_JSON_PLAIN  = 100;
     public static final int TYPEID_JSON_BINARY = 101;
     public static final int TYPEID_FST         = 102;
+    public static final int TYPEID_KRYO        = 103;
 }

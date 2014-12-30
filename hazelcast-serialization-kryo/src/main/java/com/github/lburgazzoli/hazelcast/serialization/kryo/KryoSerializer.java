@@ -13,53 +13,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.lburgazzoli.hazelcast.serialization.fst;
+package com.github.lburgazzoli.hazelcast.serialization.kryo;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.io.UnsafeInput;
+import com.esotericsoftware.kryo.io.UnsafeOutput;
 import com.github.lburgazzoli.hazelcast.serialization.HzSerializationConstants;
 import com.github.lburgazzoli.hazelcast.serialization.HzSerializer;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.Serializer;
 import com.hazelcast.nio.serialization.StreamSerializer;
-import org.nustaq.serialization.FSTConfiguration;
-import org.nustaq.serialization.FSTObjectInput;
-import org.nustaq.serialization.FSTObjectOutput;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public final class FstSerializer<T> extends HzSerializer<T, FSTConfiguration> implements StreamSerializer<T> {
-    private FstSerializer(final Class<T> type, int typeId) {
+public final class KryoSerializer<T> extends HzSerializer<T, Kryo> implements StreamSerializer<T> {
+
+    private KryoSerializer(final Class<T> type, int typeId) {
         super(
             type,
             typeId,
             () -> {
-                FSTConfiguration cfg = FSTConfiguration.createDefaultConfiguration();
-                cfg.registerClass(type);
+                Kryo kryo = new Kryo();
+                kryo.register(type);
 
-                return cfg;
+                return kryo;
             }
         );
     }
 
     @Override
     public void write(ObjectDataOutput out, T object) throws IOException {
-        FSTObjectOutput fstout = get().getObjectOutput((OutputStream) out);
-        fstout.writeObject(object);
-        fstout.flush();
+        try(Output output = new UnsafeOutput((OutputStream) out)) {
+            get().writeObject(output, object);
+            output.flush();
+            output.close();
+        }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T read(ObjectDataInput in) throws IOException {
-        FSTObjectInput fstin = get().getObjectInput((InputStream)in);
+        T object = null;
 
-        try {
-            return (T)fstin.readObject();
-        } catch(Exception e) {
-            throw new IOException(e);
+        try(final Input input = new UnsafeInput((InputStream) in)) {
+            object = get().readObject(input, getType());
+            input.close();
         }
+
+
+        return object;
     }
 
     // *************************************************************************
@@ -67,6 +73,6 @@ public final class FstSerializer<T> extends HzSerializer<T, FSTConfiguration> im
     // *************************************************************************
 
     public static <V> Serializer make(final Class<V> type) {
-        return new FstSerializer<>(type, HzSerializationConstants.TYPEID_FST);
+        return new KryoSerializer<>(type, HzSerializationConstants.TYPEID_KRYO);
     }
 }

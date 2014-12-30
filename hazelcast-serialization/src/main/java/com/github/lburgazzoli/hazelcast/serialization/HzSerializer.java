@@ -17,13 +17,21 @@ package com.github.lburgazzoli.hazelcast.serialization;
 
 import com.hazelcast.nio.serialization.Serializer;
 
-public class HzSerializer<T> implements Serializer {
+import java.util.function.Supplier;
+
+public class HzSerializer<T,S> implements Serializer, Supplier<S> {
     protected final Class<T> m_type;
     protected final int m_typeId;
+    protected final ThreadLocal<S> m_threadLocal;
 
     protected HzSerializer(final Class<T> type, int typeId) {
-        m_type   = type;
-        m_typeId = typeId;
+        this(type, typeId, () -> null );
+    }
+
+    protected HzSerializer(final Class<T> type, int typeId, Supplier<? extends S> supplier) {
+        m_type        = type;
+        m_typeId      = typeId;
+        m_threadLocal = ThreadLocal.withInitial(supplier);
     }
 
     @Override
@@ -37,5 +45,9 @@ public class HzSerializer<T> implements Serializer {
 
     public Class<T> getType() {
         return m_type;
+    }
+
+    public S get() {
+        return m_threadLocal.get();
     }
 }

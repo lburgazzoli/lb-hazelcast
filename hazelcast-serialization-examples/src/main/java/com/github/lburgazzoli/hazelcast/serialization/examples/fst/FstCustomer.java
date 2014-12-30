@@ -1,4 +1,4 @@
-package com.github.lburgazzoli.hazelcast.serialization.fst.examples;
+package com.github.lburgazzoli.hazelcast.serialization.examples.fst;
 
 import java.io.Serializable;
 

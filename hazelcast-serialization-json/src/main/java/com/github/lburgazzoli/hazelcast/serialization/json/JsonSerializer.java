@@ -21,45 +21,48 @@ import com.fasterxml.jackson.dataformat.smile.SmileFactory;
 import com.github.lburgazzoli.hazelcast.serialization.HzSerializationConstants;
 import com.github.lburgazzoli.hazelcast.serialization.HzSerializer;
 import com.hazelcast.nio.serialization.ByteArraySerializer;
+import com.hazelcast.nio.serialization.Serializer;
 
 import java.io.IOException;
 
-public final class JsonSerializer<T> extends HzSerializer<T> implements ByteArraySerializer<T> {
-    private final ObjectMapper m_mapper;
-
+public final class JsonSerializer<T> extends HzSerializer<T, ObjectMapper> implements ByteArraySerializer<T> {
     private JsonSerializer(Class<T> type, int typeId) {
         this(type, typeId, null);
     }
 
     private JsonSerializer(Class<T> type, int typeId, final JsonFactory factory) {
-        super(type, typeId);
-        m_mapper = new ObjectMapper(factory);
+        super(
+            type,
+            typeId,
+            () -> new ObjectMapper(factory)
+        );
     }
 
     @Override
     public byte[] write(T object) throws IOException {
-        return m_mapper.writeValueAsBytes(object);
+        return get().writeValueAsBytes(object);
     }
 
+    @SuppressWarnings("uncheked")
     @Override
     public T read(byte[] bytes) throws IOException {
-        return m_mapper.readValue(bytes, getType());
+        return (T)get().readValue(bytes, getType());
     }
 
     // *************************************************************************
     //
     // *************************************************************************
 
-    public static <V> JsonSerializer<V> makeBinary(final Class<V> type) {
-        return new JsonSerializer<V>(
+    public static <V> Serializer makeBinary(final Class<V> type) {
+        return new JsonSerializer<>(
             type,
             HzSerializationConstants.TYPEID_JSON_BINARY,
             new SmileFactory()
         );
     }
 
-    public static <V> JsonSerializer<V> makePlain(final Class<V> type) {
-        return new JsonSerializer<V>(
+    public static <V> Serializer makePlain(final Class<V> type) {
+        return new JsonSerializer<>(
             type,
             HzSerializationConstants.TYPEID_JSON_PLAIN
         );
