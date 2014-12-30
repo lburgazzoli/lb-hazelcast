@@ -16,22 +16,20 @@
 package com.github.lburgazzoli.hazelcast.serialization.kryo;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.io.UnsafeInput;
 import com.esotericsoftware.kryo.io.UnsafeOutput;
 import com.github.lburgazzoli.hazelcast.serialization.HzSerializationConstants;
-import com.github.lburgazzoli.hazelcast.serialization.HzSerializer;
+import com.github.lburgazzoli.hazelcast.serialization.HzStreamSerializer;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.Serializer;
-import com.hazelcast.nio.serialization.StreamSerializer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public final class KryoSerializer<T> extends HzSerializer<T, Kryo> implements StreamSerializer<T> {
+public final class KryoSerializer<T> extends HzStreamSerializer<T, Kryo> {
 
     private KryoSerializer(final Class<T> type, int typeId) {
         super(
@@ -47,16 +45,15 @@ public final class KryoSerializer<T> extends HzSerializer<T, Kryo> implements St
     }
 
     @Override
-    public void write(ObjectDataOutput objectDataOutput, T object) throws IOException {
-        final Output output = new UnsafeOutput((OutputStream) objectDataOutput);
+    protected void streamedWrite(OutputStream outputStream, T object) throws IOException {
+        final Output output = new UnsafeOutput(outputStream);
         get().writeObject(output, object);
         output.flush();
     }
 
     @Override
-    public T read(ObjectDataInput objectDataInput) throws IOException {
-        final InputStream in = (InputStream) objectDataInput;
-        return get().readObject(new UnsafeInput(in), getType());
+    protected T streamedRead(InputStream inputStream) throws IOException {
+        return get().readObject(new UnsafeInput(inputStream), getType());
     }
 
     // *************************************************************************

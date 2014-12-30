@@ -15,9 +15,6 @@
  */
 package com.github.lburgazzoli.hazelcast.serialization.json;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.smile.SmileFactory;
 import com.github.lburgazzoli.hazelcast.serialization.HzSerializationConstants;
 import com.github.lburgazzoli.hazelcast.serialization.HzStreamSerializer;
 import com.hazelcast.nio.ObjectDataInput;
@@ -26,44 +23,30 @@ import com.hazelcast.nio.serialization.Serializer;
 
 import java.io.IOException;
 
-public final class JsonSerializer<T> extends HzStreamSerializer<T, ObjectMapper> {
-    private JsonSerializer(Class<T> type, int typeId) {
-        this(type, typeId, null);
-    }
+public final class JsonEnvelopeSerializer extends HzStreamSerializer<JsonEnvelope, JsonEnvelope> {
+    public static final Class<JsonEnvelope>  TYPE     = JsonEnvelope.class;
+    public static final Serializer           INSTANCE = make();
 
-    private JsonSerializer(Class<T> type, int typeId, final JsonFactory factory) {
-        super(
-            type,
-            typeId,
-            () -> new ObjectMapper(factory)
-        );
+    private JsonEnvelopeSerializer(int typeId) {
+        super(TYPE, typeId, null);
     }
 
     @Override
-    public void write(ObjectDataOutput out, T object) throws IOException {
-        out.writeByteArray(get().writeValueAsBytes(object));
+    public void write(ObjectDataOutput out, JsonEnvelope object) throws IOException {
+        out.writeByteArray(object.data());
     }
 
     @Override
-    public T read(ObjectDataInput in) throws IOException {
-        return get().readValue(in.readByteArray(), getType());
+    public JsonEnvelope read(ObjectDataInput in) throws IOException {
+        return new JsonEnvelope(in.readByteArray());
     }
 
     // *************************************************************************
     //
     // *************************************************************************
 
-    public static <V> Serializer makeBinary(final Class<V> type) {
-        return new JsonSerializer<>(
-            type,
-            HzSerializationConstants.TYPEID_JSON_BINARY,
-            new SmileFactory()
-        );
-    }
-
-    public static <V> Serializer makePlain(final Class<V> type) {
-        return new JsonSerializer<>(
-            type,
+    public static Serializer make() {
+        return new JsonEnvelopeSerializer(
             HzSerializationConstants.TYPEID_JSON_PLAIN
         );
     }

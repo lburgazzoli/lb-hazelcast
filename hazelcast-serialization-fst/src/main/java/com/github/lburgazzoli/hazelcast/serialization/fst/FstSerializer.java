@@ -17,6 +17,7 @@ package com.github.lburgazzoli.hazelcast.serialization.fst;
 
 import com.github.lburgazzoli.hazelcast.serialization.HzSerializationConstants;
 import com.github.lburgazzoli.hazelcast.serialization.HzSerializer;
+import com.github.lburgazzoli.hazelcast.serialization.HzStreamSerializer;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.Serializer;
@@ -29,7 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public final class FstSerializer<T> extends HzSerializer<T, FSTConfiguration> implements StreamSerializer<T> {
+public final class FstSerializer<T> extends HzStreamSerializer<T, FSTConfiguration> {
     private FstSerializer(final Class<T> type, int typeId) {
         super(
             type,
@@ -44,16 +45,16 @@ public final class FstSerializer<T> extends HzSerializer<T, FSTConfiguration> im
     }
 
     @Override
-    public void write(ObjectDataOutput objectDataOutput, T object) throws IOException {
-        FSTObjectOutput out = get().getObjectOutput((OutputStream) objectDataOutput);
+    protected void streamedWrite(OutputStream outputStream, T object) throws IOException {
+        FSTObjectOutput out = get().getObjectOutput(outputStream);
         out.writeObject(object);
         out.flush();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public T read(ObjectDataInput objectDataInput) throws IOException {
-        FSTObjectInput in = get().getObjectInput((InputStream)objectDataInput);
+    protected T streamedRead(InputStream inputStream) throws IOException {
+        FSTObjectInput in = get().getObjectInput(inputStream);
 
         try {
             return (T)in.readObject();
