@@ -1,9 +1,9 @@
 
 dependencies {
-    compile project(':hazelcast-common')
-    compile project(':hazelcast-serialization')
-    compile project(':hazelcast-serialization-fst')
-    compile project(':hazelcast-serialization-json')
-    compile project(':hazelcast-serialization-kryo')
+    compile project(':lb-hazelcast-common')
+    compile project(':lb-hazelcast-serialization')
+    compile project(':lb-hazelcast-serialization-fst')
+    compile project(':lb-hazelcast-serialization-json')
+    compile project(':lb-hazelcast-serialization-kryo')
 }
 

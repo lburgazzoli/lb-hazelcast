@@ -9,7 +9,7 @@ project.ext {
 }
 
 dependencies {
-    compile project(':hazelcast-common')
+    compile project(':lb-hazelcast-common')
 }
 
 jar {

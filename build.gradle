@@ -48,7 +48,6 @@ subprojects {
             }
         }
 
-        prefix           = 'lb'
         isReleaseVersion = !version.endsWith("SNAPSHOT")
         gitRoot          = "https://github.com/lburgazzoli"
         gitProject       = "https://github.com/lburgazzoli/lb-hazelcast"
@@ -56,15 +55,15 @@ subprojects {
         versions = [
             slf4j              : '1.7.9',
             log4j2             : '2.1',
-            jackson            : '2.4.4',
-            jacksonSmile       : '2.4.4',
+            jackson            : '2.5.0',
+            jacksonSmile       : '2.5.0',
             hazelcast          : '3.4',
             guava              : '18.0',
             commonsLang        : '3.3.2',
             commonsCollections : '4.0',
-            commonsPool        : '2.2',
+            commonsPool        : '2.3',
             commonsIO          : '2.4',
-            spring             : '4.1.3.RELEASE',
+            spring             : '4.1.4.RELEASE',
             springBoot         : '1.2.0.RELEASE',
             junit              : '4.12',
             kryo               : '3.0.0',
@@ -72,7 +71,7 @@ subprojects {
             gsCollections      : '5.1.0',
             groovy             : '2.3.9',
             jsonpath           : '1.2',
-            fst                :  '2.19'
+            fst                : '2.19'
         ]
     }
 
@@ -142,13 +141,13 @@ subprojects {
     // *************************************************************************
 
     jar {
-        baseName = "${project.prefix}-${project.name}"
+        baseName = "${project.name}"
 
-        manifest.attributes['Bundle-Description'     ] = "${project.prefix} :: ${project.name}"
-        manifest.attributes['Bundle-Name'            ] = "${project.prefix} :: ${project.name}"
-        manifest.attributes['Bundle-SymbolicName'    ] = "${project.group}-${project.prefix}-${project.name}"
+        manifest.attributes['Bundle-Description'     ] = "${project.name}"
+        manifest.attributes['Bundle-Name'            ] = "${project.name}"
+        manifest.attributes['Bundle-SymbolicName'    ] = "${project.group}-${project.name}"
         manifest.attributes['Bundle-Version'         ] = project.version.replaceAll('-','.')
-        manifest.attributes['Implementation-Title'   ] = "${project.group}-${project.prefix}-${project.name}-${project.version}"
+        manifest.attributes['Implementation-Title'   ] = "${project.group}-${project.name}-${project.version}"
         manifest.attributes['Implementation-Version' ] = project.version
         manifest.attributes['Implementation-Vendor'  ] = 'lb'
 
@@ -172,8 +171,8 @@ subprojects {
 
     modifyPom {
         project {
-            name          = "${project.prefix}-${project.name}"
-            description   = "${project.prefix}-${project.name}"
+            name          = "${project.name}"
+            description   = "${project.name}"
             url           = "${project.gitProject}"
             packaging     = 'jar'
 

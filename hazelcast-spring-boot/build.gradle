@@ -1,6 +1,6 @@
 
 dependencies {
-    compile project(':hazelcast-common')
+    compile project(':lb-hazelcast-common')
 
     compile "org.springframework.boot:spring-boot:$versions.springBoot"
     compile "org.springframework.boot:spring-boot-autoconfigure:$versions.springBoot"

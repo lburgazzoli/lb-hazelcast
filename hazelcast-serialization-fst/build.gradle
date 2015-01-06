@@ -9,8 +9,8 @@ project.ext {
 }
 
 dependencies {
-    compile project(':hazelcast-common')
-    compile project(':hazelcast-serialization')
+    compile project(':lb-hazelcast-common')
+    compile project(':lb-hazelcast-serialization')
 
     compile "de.ruedigermoeller:fst:$versions.fst"
 }
