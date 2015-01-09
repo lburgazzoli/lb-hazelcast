@@ -6,7 +6,6 @@ include "hazelcast-serialization-kryo"
 include "hazelcast-serialization-examples"
 include "hazelcast-spring-boot"
 include "hazelcast-spring-boot-examples"
-include "hazelcast-karaf-cmd"
 
 rootProject.children.each { 
     it.name = "lb-" + it.name 
