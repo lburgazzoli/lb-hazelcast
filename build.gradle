@@ -10,7 +10,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.bmuschko:gradle-nexus-plugin:2.2'
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.8'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE'
     }
@@ -29,7 +29,7 @@ subprojects {
     apply plugin: 'com.bmuschko.nexus'
     apply plugin: 'com.github.ben-manes.versions'
 
-    version             = '3.4.0-SNAPSHOT'
+    version             = '3.4.1-SNAPSHOT'
     group               = 'com.github.lburgazzoli'
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
