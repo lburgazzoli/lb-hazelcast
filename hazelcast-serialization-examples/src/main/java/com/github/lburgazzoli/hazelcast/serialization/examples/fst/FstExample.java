@@ -17,17 +17,12 @@ package com.github.lburgazzoli.hazelcast.serialization.examples.fst;
 
 
 import com.github.lburgazzoli.hazelcast.serialization.fst.FstSerializer;
-import com.hazelcast.config.Config;
-import com.hazelcast.config.InMemoryFormat;
-import com.hazelcast.config.JoinConfig;
-import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.NetworkConfig;
-import com.hazelcast.config.SerializerConfig;
-import com.hazelcast.core.EntryAdapter;
+import com.hazelcast.config.*;
 import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.map.listener.EntryAddedListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,13 +35,14 @@ public final class FstExample {
     //
     // *************************************************************************
 
-    private static class SimpleEntryListener extends EntryAdapter<String, FstCustomer> {
+    private static class SimpleEntryListener implements EntryAddedListener<String, FstCustomer> {
         private final String m_id;
 
         public SimpleEntryListener(String id) {
             m_id = id;
         }
 
+        @Override
         public void entryAdded(EntryEvent<String, FstCustomer> event) {
             try {
                 LOGGER.info("{} - {} => {}",

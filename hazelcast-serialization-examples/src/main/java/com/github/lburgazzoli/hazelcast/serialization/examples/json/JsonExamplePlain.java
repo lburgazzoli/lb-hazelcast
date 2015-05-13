@@ -21,24 +21,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.lburgazzoli.hazelcast.serialization.json.JsonEnvelopeSerializer;
 import com.github.lburgazzoli.hazelcast.serialization.json.JsonSerializer;
-import com.hazelcast.config.Config;
-import com.hazelcast.config.InMemoryFormat;
-import com.hazelcast.config.JoinConfig;
-import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.NetworkConfig;
-import com.hazelcast.config.SerializerConfig;
-import com.hazelcast.core.EntryAdapter;
+import com.hazelcast.config.*;
 import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.map.listener.EntryAddedListener;
 import com.hazelcast.nio.serialization.Serializer;
-import com.hazelcast.query.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
-import java.util.Map;
 import java.util.Random;
 
 public final class JsonExamplePlain {
@@ -50,8 +43,8 @@ public final class JsonExamplePlain {
     //
     // *************************************************************************
 
-    private static class ObjEntryListener extends EntryAdapter<String, JsonNode> {
-
+    private static class ObjEntryListener implements EntryAddedListener<String, JsonNode> {
+        @Override
         public void entryAdded(EntryEvent<String, JsonNode> event) {
             try {
                 LOGGER.info("Obj - {} => {}",
@@ -63,7 +56,8 @@ public final class JsonExamplePlain {
         }
     }
 
-    private static class TxtEntryListener extends EntryAdapter<String, String> {
+    private static class TxtEntryListener implements EntryAddedListener<String, String> {
+        @Override
         public void entryAdded(EntryEvent<String, String> event) {
             try {
                 LOGGER.info("Txt - {} => {}",

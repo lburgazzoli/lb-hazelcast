@@ -17,35 +17,12 @@ package com.github.lburgazzoli.hazelcast;
 
 import com.google.common.collect.Lists;
 import com.hazelcast.config.Config;
-import com.hazelcast.core.ClientService;
-import com.hazelcast.core.Cluster;
-import com.hazelcast.core.DistributedObject;
-import com.hazelcast.core.DistributedObjectListener;
-import com.hazelcast.core.Endpoint;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IAtomicLong;
-import com.hazelcast.core.IAtomicReference;
-import com.hazelcast.core.ICountDownLatch;
-import com.hazelcast.core.IExecutorService;
-import com.hazelcast.core.IList;
-import com.hazelcast.core.ILock;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.IQueue;
-import com.hazelcast.core.ISemaphore;
-import com.hazelcast.core.ISet;
-import com.hazelcast.core.ITopic;
-import com.hazelcast.core.IdGenerator;
-import com.hazelcast.core.LifecycleService;
-import com.hazelcast.core.MultiMap;
-import com.hazelcast.core.ReplicatedMap;
-import com.hazelcast.core.PartitionService;
+import com.hazelcast.core.*;
 import com.hazelcast.logging.LoggingService;
 import com.hazelcast.mapreduce.JobTracker;
-import com.hazelcast.transaction.TransactionContext;
-import com.hazelcast.transaction.TransactionException;
-import com.hazelcast.transaction.TransactionOptions;
-import com.hazelcast.transaction.TransactionalTask;
+import com.hazelcast.quorum.QuorumService;
+import com.hazelcast.ringbuffer.Ringbuffer;
+import com.hazelcast.transaction.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +39,7 @@ public class HzPrefixedInstance implements HazelcastInstance {
     /**
      * c-tor
      *
-     * @param instance the hazeclast instance
+     * @param instance the Hazelcast instance
      */
     public HzPrefixedInstance(final HazelcastInstance instance) {
         this(instance,null);
@@ -70,7 +47,7 @@ public class HzPrefixedInstance implements HazelcastInstance {
     /**
      * c-tor
      *
-     * @param instance  the hazeclast instance
+     * @param instance  the Hazelcast instance
      * @param prefix    the object prefix
      */
     public HzPrefixedInstance(final HazelcastInstance instance, final String prefix) {
@@ -162,14 +139,24 @@ public class HzPrefixedInstance implements HazelcastInstance {
     }
 
     @Override
-    public ILock getLock(String key) {
-        return m_instance.getLock(getPrefix(key));
+    public ILock getLock(String name) {
+        return m_instance.getLock(getPrefix(name));
     }
 
     @Deprecated
     @Override
     public ILock getLock(Object key) {
         return m_instance.getLock(key);
+    }
+
+    @Override
+    public <E> Ringbuffer<E> getRingbuffer(String name) {
+        return m_instance.getRingbuffer(getPrefix(name));
+    }
+
+    @Override
+    public <E> ITopic<E> getReliableTopic(String name) {
+        return m_instance.getReliableTopic(getPrefix(name));
     }
 
     @Override
@@ -258,6 +245,11 @@ public class HzPrefixedInstance implements HazelcastInstance {
     }
 
     @Override
+    public QuorumService getQuorumService() {
+        return m_instance.getQuorumService();
+    }
+
+    @Override
     public ClientService getClientService() {
         return m_instance.getClientService();
     }
@@ -286,6 +278,11 @@ public class HzPrefixedInstance implements HazelcastInstance {
     @Override
     public ConcurrentMap<String, Object> getUserContext() {
         return m_instance.getUserContext();
+    }
+
+    @Override
+    public HazelcastXAResource getXAResource() {
+        return m_instance.getXAResource();
     }
 
     @Override
