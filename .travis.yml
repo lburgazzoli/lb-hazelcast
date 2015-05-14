@@ -2,7 +2,7 @@ language:
 - java
 
 script:
-- "./gradlew clear compileJava"
+- "./gradlew clean compileJava"
 - "./gradlew :lb-hazelcast-common:uploadArchives"
 - "./gradlew :lb-hazelcast-serialization:uploadArchives"
 - "./gradlew :lb-hazelcast-serialization-fst:uploadArchives"
