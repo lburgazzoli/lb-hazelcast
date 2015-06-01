@@ -39,13 +39,8 @@ subprojects {
         gradleScriptDir = "${rootProject.projectDir}/gradle"
 
         if(!project.hasProperty('nexusUsername') && !project.hasProperty('nexusPassword')) {
-            if(project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')) {
-                nexusUsername = sonatypeUsername
-                nexusPassword = sonatypePassword
-            } else {
-                nexusUsername = "$System.env.CI_DEPLOY_USERNAME"
-                nexusPassword = "$System.env.CI_DEPLOY_PASSWORD"
-            }
+            nexusUsername = "$System.env.CI_DEPLOY_USERNAME"
+            nexusPassword = "$System.env.CI_DEPLOY_PASSWORD"
         }
 
         isReleaseVersion = !version.endsWith("SNAPSHOT")
