@@ -17,28 +17,24 @@ package com.github.lburgazzoli.hazelcast;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ILock;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
 public class HzServiceRegistry {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HzServiceRegistry.class);
-
-    private final HazelcastInstance m_hz;
-    private final Map<String,HzServiceDefinition> m_svcMap;
-    private final ILock m_svcLock;
+    private final HazelcastInstance instance;
+    private final Map<String,HzServiceDefinition> svcMap;
+    private final ILock svcLock;
 
     /**
      * c-tor
      *
-     * @param hz
+     * @param instance
      * @param registryName
      */
-    public HzServiceRegistry(final HazelcastInstance hz, String registryName) {
-        m_hz      = hz;
-        m_svcMap  = m_hz.getMap(registryName);
-        m_svcLock = m_hz.getLock(registryName + ":lock");
+    public HzServiceRegistry(final HazelcastInstance instance, String registryName) {
+        this.instance = instance;
+        this.svcMap   = this.instance.getMap(registryName);
+        this.svcLock  = this.instance.getLock(registryName + ":lock");
     }
 
     // *************************************************************************

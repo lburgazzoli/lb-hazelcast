@@ -29,10 +29,8 @@ subprojects {
     apply plugin: 'com.bmuschko.nexus'
     apply plugin: 'com.github.ben-manes.versions'
 
-    version             = '3.5.0-SNAPSHOT'
-    group               = 'com.github.lburgazzoli'
-    sourceCompatibility = '1.8'
-    targetCompatibility = '1.8'
+    version = '3.5.0-SNAPSHOT'
+    group   = 'com.github.lburgazzoli'
 
     ext {
         gradleVersion   = '2.6'
@@ -68,8 +66,19 @@ subprojects {
             jsonpath           : '1.2',
             fst                : '2.31',
             retrofit           : '1.9.0',
-            dns                : '3.0.1'
+            dns                : '3.0.1',
+            typeconverter      : '1.0.1',
+            snakeyaml          : '1.16'
         ]
+    }
+
+    compileJava {
+        // Suppress warnings about using Unsafe and sun.misc
+        options.compilerArgs << '-XDignore.symbol.file'
+        //options.compilerArgs << '-parameters'
+
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 
     // *************************************************************************
@@ -86,7 +95,6 @@ subprojects {
     // *************************************************************************
     //
     // *************************************************************************
-
 
     repositories {
         mavenLocal()

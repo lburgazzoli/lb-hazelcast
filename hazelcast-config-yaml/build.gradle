@@ -8,6 +8,13 @@ project.ext {
     ]
 }
 
+dependencies {
+    compile project(':lb-hazelcast-common')
+    compile project(':lb-hazelcast-config')
+
+    compile "org.yaml:snakeyaml:$versions.snakeyaml"
+}
+
 jar {
     manifest {
         instruction 'Import-Package' , bundleImportPackages.join(',')

@@ -21,8 +21,6 @@ import com.esotericsoftware.kryo.io.UnsafeInput;
 import com.esotericsoftware.kryo.io.UnsafeOutput;
 import com.github.lburgazzoli.hazelcast.serialization.HzSerializationConstants;
 import com.github.lburgazzoli.hazelcast.serialization.HzStreamSerializer;
-import com.hazelcast.nio.ObjectDataInput;
-import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.Serializer;
 
 import java.io.IOException;

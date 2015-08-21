@@ -1,11 +1,13 @@
 /*
- * Copyright 2014 lburgazzoli
+ * Copyright (c) 2015 Luca Burgazzoli
+ *
+ * https://github.com/lburgazzoli
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,24 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.github.lburgazzoli.hazelcast;
 
-import com.google.common.collect.Maps;
-
-import java.util.Map;
-
-public class HzServiceDefinition {
-    private final Map<String,String> attributes;
-
-    public HzServiceDefinition() {
-        attributes = Maps.newHashMap();
+public class HzUtil {
+    public static void rethrowUnchecked(final Exception ex) {
+        HzUtil.<RuntimeException>rethrow(ex);
     }
 
-    public void put(String key, String val) {
-        attributes.put(key, val);
-    }
-
-    public String get(String key) {
-        return attributes.get(key);
+    @SuppressWarnings("unchecked")
+    private static <T extends Exception> void rethrow(final Exception ex) throws T {
+        throw (T)ex;
     }
 }

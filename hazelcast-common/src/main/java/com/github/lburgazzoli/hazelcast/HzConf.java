@@ -27,7 +27,7 @@ import java.util.Set;
 public class HzConf extends Config implements Cloneable {
     private static final Logger LOGGER = LoggerFactory.getLogger(HzConf.class);
 
-    private final String m_prefix;
+    private final String prefix;
 
     public HzConf() {
         this(null);
@@ -37,7 +37,7 @@ public class HzConf extends Config implements Cloneable {
         super();
         super.setProperty("hazelcast.logging.type","slf4j");
 
-        m_prefix = prefix;
+        this.prefix = prefix;
     }
 
     // *************************************************************************
@@ -123,7 +123,7 @@ public class HzConf extends Config implements Cloneable {
     public HazelcastInstance newHazelcastInstance() {
         try {
             final HazelcastInstance hz = Hazelcast.newHazelcastInstance((Config)this.clone());
-            return m_prefix == null ? hz : new HzPrefixedInstance(hz,m_prefix);
+            return prefix == null ? hz : new HzPrefixedInstance(hz, prefix);
         } catch (CloneNotSupportedException e) {
             LOGGER.warn("CloneNotSupportedException",e);
         }

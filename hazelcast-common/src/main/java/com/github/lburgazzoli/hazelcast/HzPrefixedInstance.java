@@ -31,10 +31,8 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentMap;
 
 public class HzPrefixedInstance implements HazelcastInstance {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HzPrefixedInstance.class);
-
-    private final HazelcastInstance m_instance;
-    private final String m_prefix;
+    private final HazelcastInstance instance;
+    private final String prefix;
 
     /**
      * c-tor
@@ -51,8 +49,8 @@ public class HzPrefixedInstance implements HazelcastInstance {
      * @param prefix    the object prefix
      */
     public HzPrefixedInstance(final HazelcastInstance instance, final String prefix) {
-        m_instance = instance;
-        m_prefix = prefix;
+        this.instance = instance;
+        this.prefix = prefix;
     }
 
     /**
@@ -84,9 +82,9 @@ public class HzPrefixedInstance implements HazelcastInstance {
      * @return the prefix
      */
     public String getPrefix(String name) {
-        return StringUtils.isEmpty(m_prefix)
+        return StringUtils.isEmpty(prefix)
             ? name
-            : m_prefix + ":" + name;
+            : prefix + ":" + name;
     }
 
     // *************************************************************************
@@ -95,199 +93,199 @@ public class HzPrefixedInstance implements HazelcastInstance {
 
     @Override
     public String getName() {
-        return m_instance.getName();
+        return instance.getName();
     }
 
     @Override
     public <E> IQueue<E> getQueue(String name) {
-        return m_instance.getQueue(getPrefix(name));
+        return instance.getQueue(getPrefix(name));
     }
 
     @Override
     public <E> ITopic<E> getTopic(String name) {
-        return m_instance.getTopic(getPrefix(name));
+        return instance.getTopic(getPrefix(name));
     }
 
     @Override
     public <E> ISet<E> getSet(String name) {
-        return m_instance.getSet(getPrefix(name));
+        return instance.getSet(getPrefix(name));
     }
 
     @Override
     public <E> IList<E> getList(String name) {
-        return m_instance.getList(getPrefix(name));
+        return instance.getList(getPrefix(name));
     }
 
     @Override
     public <K, V> IMap<K, V> getMap(String name) {
-        return m_instance.getMap(getPrefix(name));
+        return instance.getMap(getPrefix(name));
     }
 
     @Override
     public <K, V> ReplicatedMap<K, V> getReplicatedMap(String name) {
-        return m_instance.getReplicatedMap(getPrefix(name));
+        return instance.getReplicatedMap(getPrefix(name));
     }
 
     @Override
     public JobTracker getJobTracker(String name) {
-        return m_instance.getJobTracker(getPrefix(name));
+        return instance.getJobTracker(getPrefix(name));
     }
 
     @Override
     public <K, V> MultiMap<K, V> getMultiMap(String name) {
-        return m_instance.getMultiMap(getPrefix(name));
+        return instance.getMultiMap(getPrefix(name));
     }
 
     @Override
     public ILock getLock(String name) {
-        return m_instance.getLock(getPrefix(name));
+        return instance.getLock(getPrefix(name));
     }
 
     @Deprecated
     @Override
     public ILock getLock(Object key) {
-        return m_instance.getLock(key);
+        return instance.getLock(key);
     }
 
     @Override
     public <E> Ringbuffer<E> getRingbuffer(String name) {
-        return m_instance.getRingbuffer(getPrefix(name));
+        return instance.getRingbuffer(getPrefix(name));
     }
 
     @Override
     public <E> ITopic<E> getReliableTopic(String name) {
-        return m_instance.getReliableTopic(getPrefix(name));
+        return instance.getReliableTopic(getPrefix(name));
     }
 
     @Override
     public Cluster getCluster() {
-        return m_instance.getCluster();
+        return instance.getCluster();
     }
 
     @Override
     public Endpoint getLocalEndpoint() {
-        return m_instance.getLocalEndpoint();
+        return instance.getLocalEndpoint();
     }
 
     @Override
     public IExecutorService getExecutorService(String name) {
-        return m_instance.getExecutorService(getPrefix(name));
+        return instance.getExecutorService(getPrefix(name));
     }
 
     @Override
     public <T> T executeTransaction(TransactionalTask<T> task) throws TransactionException {
-        return m_instance.executeTransaction(task);
+        return instance.executeTransaction(task);
     }
 
     @Override
     public <T> T executeTransaction(TransactionOptions options, TransactionalTask<T> task) throws TransactionException {
-        return m_instance.executeTransaction(options, task);
+        return instance.executeTransaction(options, task);
     }
 
     @Override
     public TransactionContext newTransactionContext() {
-        return m_instance.newTransactionContext();
+        return instance.newTransactionContext();
     }
 
     @Override
     public TransactionContext newTransactionContext(TransactionOptions options) {
-        return m_instance.newTransactionContext(options);
+        return instance.newTransactionContext(options);
     }
 
     @Override
     public IdGenerator getIdGenerator(String name) {
-        return m_instance.getIdGenerator(getPrefix(name));
+        return instance.getIdGenerator(getPrefix(name));
     }
 
     @Override
     public IAtomicLong getAtomicLong(String name) {
-        return m_instance.getAtomicLong(getPrefix(name));
+        return instance.getAtomicLong(getPrefix(name));
     }
 
     @Override
     public <E> IAtomicReference<E> getAtomicReference(String name) {
-        return m_instance.getAtomicReference(getPrefix(name));
+        return instance.getAtomicReference(getPrefix(name));
     }
 
     @Override
     public ICountDownLatch getCountDownLatch(String name) {
-        return m_instance.getCountDownLatch(getPrefix(name));
+        return instance.getCountDownLatch(getPrefix(name));
     }
 
     @Override
     public ISemaphore getSemaphore(String name) {
-        return m_instance.getSemaphore(getPrefix(name));
+        return instance.getSemaphore(getPrefix(name));
     }
 
     @Override
     public Collection<DistributedObject> getDistributedObjects() {
-        return m_instance.getDistributedObjects();
+        return instance.getDistributedObjects();
     }
 
     @Override
     public String addDistributedObjectListener(DistributedObjectListener distributedObjectListener) {
-        return m_instance.addDistributedObjectListener(distributedObjectListener);
+        return instance.addDistributedObjectListener(distributedObjectListener);
     }
 
     @Override
     public boolean removeDistributedObjectListener(String registrationId) {
-        return m_instance.removeDistributedObjectListener(registrationId);
+        return instance.removeDistributedObjectListener(registrationId);
     }
 
     @Override
     public Config getConfig() {
-        return m_instance.getConfig();
+        return instance.getConfig();
     }
 
     @Override
     public PartitionService getPartitionService() {
-        return m_instance.getPartitionService();
+        return instance.getPartitionService();
     }
 
     @Override
     public QuorumService getQuorumService() {
-        return m_instance.getQuorumService();
+        return instance.getQuorumService();
     }
 
     @Override
     public ClientService getClientService() {
-        return m_instance.getClientService();
+        return instance.getClientService();
     }
 
     @Override
     public LoggingService getLoggingService() {
-        return m_instance.getLoggingService();
+        return instance.getLoggingService();
     }
 
     @Override
     public LifecycleService getLifecycleService() {
-        return m_instance.getLifecycleService();
+        return instance.getLifecycleService();
     }
 
     @Deprecated
     @Override
     public <T extends DistributedObject> T getDistributedObject(String serviceName, Object id) {
-        return m_instance.getDistributedObject(serviceName, id);
+        return instance.getDistributedObject(serviceName, id);
     }
 
     @Override
     public <T extends DistributedObject> T getDistributedObject(String serviceName, String name) {
-        return m_instance.getDistributedObject(serviceName, getPrefix(name));
+        return instance.getDistributedObject(serviceName, getPrefix(name));
     }
 
     @Override
     public ConcurrentMap<String, Object> getUserContext() {
-        return m_instance.getUserContext();
+        return instance.getUserContext();
     }
 
     @Override
     public HazelcastXAResource getXAResource() {
-        return m_instance.getXAResource();
+        return instance.getXAResource();
     }
 
     @Override
     public void shutdown() {
-        m_instance.shutdown();
+        instance.shutdown();
     }
 
     // *************************************************************************
@@ -301,7 +299,7 @@ public class HzPrefixedInstance implements HazelcastInstance {
      */
     public Collection<DistributedObject> getDistributedObjects(final Class<?> type) {
         Collection<DistributedObject> rv = Lists.newArrayList();
-        for(DistributedObject object : m_instance.getDistributedObjects()) {
+        for(DistributedObject object : instance.getDistributedObjects()) {
             if(type == null) {
                 rv.add(object);
             } else if(type.isAssignableFrom(object.getClass())) {

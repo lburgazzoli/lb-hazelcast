@@ -1,0 +1,25 @@
+{
+  "group" : {
+    "name"     : "group-name",
+    "password" : "group-password"
+  },
+  "network" : {
+    "reuse-address"       : true,
+    "port"                : 5900,
+    "port-auto-increment" : false,
+    "port-count"          : 100,
+    "outbound-ports"      : [ "9000-10000", "10100" ],
+    "public-address"      : "127.0.0.1",
+    "join" : {
+      "multicast" : {
+        "enabled"               : true,
+        "loopback-mode-enabled" : false,
+        "trusted-interfaces"    : [ "eth0", "eth1" ]
+      },
+      "tcp-ip" : {
+        "enabled"                    : true,
+        "connection-timeout-seconds" : 10
+      }
+    }
+  }
+}
