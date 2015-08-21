@@ -30,28 +30,28 @@ public class HzConfig {
      *
      * @param configSupplier
      * @param root
-     * @param function
+     * @param processor
      * @param <C>
      */
     public static <C> void forEachElementApply(
         final Supplier<C> configSupplier,
         final Map.Entry<String, Object> root,
-        final TriFunction<C , String, Object, C> function) {
+        final HzConfigProcessor<C> processor) {
 
-        forEachElementApply(configSupplier, root.getValue(), function);
+        forEachElementApply(configSupplier, root.getValue(), processor);
     }
 
     /**
      *
      * @param configSupplier
      * @param root
-     * @param function
+     * @param processor
      * @param <C>
      */
     public static <C> void forEachElementApply(
         final Supplier<C> configSupplier,
         final Object root,
-        final TriFunction<C , String, Object, C> function) {
+        final HzConfigProcessor<C> processor) {
 
         if(null == root) {
             throw new IllegalArgumentException("Root node can't be null");
@@ -61,26 +61,26 @@ public class HzConfig {
             throw new IllegalArgumentException("Root node is not a map (" + root.getClass() + ")");
         }
 
-        forEachElementApply(configSupplier, (Map<String, Object>)root, function);
+        forEachElementApply(configSupplier, (Map<String, Object>)root, processor);
     }
 
     /**
      *
      * @param configSupplier
      * @param root
-     * @param function
+     * @param processor
      * @param <C>
      */
     public static <C> void forEachElementApply(
             final Supplier<C> configSupplier,
             final Map<String, Object> root,
-            final TriFunction<C , String, Object, C> function) {
+            final HzConfigProcessor<C> processor) {
 
         final C config = configSupplier.get();
         root.entrySet().stream().forEach(
             entry -> {
                 if(entry.getValue() != null) {
-                    function.apply(config, entry.getKey(), entry.getValue());
+                    processor.apply(config, entry.getKey(), entry.getValue());
                 }
             }
         );

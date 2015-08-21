@@ -21,3 +21,8 @@ network:
     tcp-ip:
       enabled: true
       connection-timeout-seconds: 10
+      required-member: "127.0.0.1"
+      members:
+        - "192.168.0.1"
+        - "192.168.0.2"
+        - "192.168.0.3"

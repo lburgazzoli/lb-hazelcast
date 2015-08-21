@@ -18,20 +18,15 @@
 
 package com.github.lburgazzoli.hazelcast.config;
 
+import com.github.lburgazzoli.hazelcast.config.processors.GroupConfigProcessor;
+import com.github.lburgazzoli.hazelcast.config.processors.NetworkConfigProcessor;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.ConfigBuilder;
-import com.hazelcast.config.GroupConfig;
-import com.hazelcast.config.JoinConfig;
-import com.hazelcast.config.MulticastConfig;
-import com.hazelcast.config.NetworkConfig;
-import com.hazelcast.config.TcpIpConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Map;
 
-import static com.github.lburgazzoli.hazelcast.config.HzConfig.convert;
 import static com.github.lburgazzoli.hazelcast.config.HzConfig.forEachElementApply;
 
 public abstract class HzConfigBuilder implements ConfigBuilder {
@@ -48,121 +43,20 @@ public abstract class HzConfigBuilder implements ConfigBuilder {
             entry -> {
                 switch (entry.getKey()) {
                     case HzConfig.Elements.GROUP:
-                        forEachElementApply(config::getGroupConfig, entry, this::groupProcessor);
+                        forEachElementApply(
+                            config::getGroupConfig,
+                            entry,
+                            GroupConfigProcessor.INSTANCE);
                         break;
                     case HzConfig.Elements.NETWORK:
-                        forEachElementApply(config::getNetworkConfig, entry, this::networkConfigProcessor);
+                        forEachElementApply(
+                            config::getNetworkConfig,
+                            entry,
+                            NetworkConfigProcessor.INSTANCE);
                         break;
                 }
             }
         );
-
-        return config;
-    }
-
-    // *************************************************************************
-    //
-    // *************************************************************************
-
-    private GroupConfig groupProcessor(GroupConfig config, String key, Object value) {
-        switch(key) {
-            case "name":
-                config.setName(convert(value, String.class));
-                break;
-            case "password":
-                config.setPassword(convert(value, String.class));
-                break;
-        }
-
-        return config;
-    }
-
-    private NetworkConfig networkConfigProcessor(NetworkConfig config, String key, Object value) {
-        switch(key) {
-            case "reuse-address":
-                config.setReuseAddress(convert(value, Boolean.class));
-                break;
-            case "port":
-                config.setPort(convert(value, Integer.class));
-                break;
-            case "port-auto-increment":
-                config.setPortAutoIncrement(convert(value, Boolean.class));
-                break;
-            case "port-count":
-                config.setPortCount(convert(value, Integer.class));
-                break;
-            case "public-address":
-                config.setPublicAddress(convert(value, String.class));
-                break;
-            case "outbound-ports":
-                ((List<String>) value).forEach(config::addOutboundPortDefinition);
-                break;
-            case "join":
-                forEachElementApply(config::getJoin, value, this::joinConfigProcessor);
-                break;
-        }
-
-        return config;
-    }
-
-    private JoinConfig joinConfigProcessor(JoinConfig config, String key, Object value) {
-        switch(key) {
-            case "multicast":
-                forEachElementApply(
-                    config::getMulticastConfig,
-                    value,
-                    this::multicastConfigProcessor);
-
-            case "tcp-ip":
-                forEachElementApply(
-                    config::getTcpIpConfig,
-                    value,
-                    this::tcpIpConfigProcessor);
-        }
-
-        return config;
-    }
-
-    private MulticastConfig multicastConfigProcessor(MulticastConfig config, String key, Object value) {
-        switch(key) {
-            case "enabled":
-                config.setEnabled(convert(value, Boolean.class));
-                break;
-            case "loopback-mode-enabled":
-                config.setLoopbackModeEnabled(convert(value, Boolean.class));
-                break;
-            case "multicast-group":
-                config.setMulticastGroup(convert(value, String.class));
-                break;
-            case "multicast-port":
-                config.setMulticastPort(convert(value, Integer.class));
-                break;
-            case "multicast-timeout-seconds":
-                config.setMulticastTimeoutSeconds(convert(value, Integer.class));
-                break;
-            case "multicast-time-to-live-seconds":
-                config.setMulticastTimeToLive(convert(value, Integer.class));
-                break;
-            case "multicast-time-to-live":
-                config.setMulticastTimeToLive(convert(value, Integer.class));
-                break;
-            case "trusted-interfaces":
-                ((List<String>)value).forEach(config::addTrustedInterface);
-                break;
-        }
-
-        return config;
-    }
-
-    private TcpIpConfig tcpIpConfigProcessor(TcpIpConfig config, String key, Object value) {
-        switch(key) {
-            case "enabled":
-                config.setEnabled(convert(value, Boolean.class));
-                break;
-            case "connection-timeout-seconds":
-                config.setConnectionTimeoutSeconds(convert(value, Integer.class));
-                break;
-        }
 
         return config;
     }

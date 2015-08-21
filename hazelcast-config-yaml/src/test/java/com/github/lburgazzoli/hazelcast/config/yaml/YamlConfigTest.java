@@ -51,23 +51,28 @@ public class YamlConfigTest {
         assertEquals(5900, netCfg.getPort());
         assertEquals(false, netCfg.isPortAutoIncrement());
         assertEquals(100, netCfg.getPortCount());
+        assertFalse(netCfg.getOutboundPortDefinitions().isEmpty());
         assertTrue(netCfg.getOutboundPortDefinitions().contains("10100"));
         assertTrue(netCfg.getOutboundPortDefinitions().contains("9000-10000"));
-        assertFalse(netCfg.getOutboundPortDefinitions().contains("1"));
         assertEquals("127.0.0.1", netCfg.getPublicAddress());
 
         // Multicast Config
         final MulticastConfig mcastCfg = netCfg.getJoin().getMulticastConfig();
         assertEquals(true, mcastCfg.isEnabled());
         assertEquals(false, mcastCfg.isLoopbackModeEnabled());
+        assertFalse(mcastCfg.getTrustedInterfaces().isEmpty());
         assertTrue(mcastCfg.getTrustedInterfaces().contains("eth0"));
         assertTrue(mcastCfg.getTrustedInterfaces().contains("eth1"));
-        assertFalse(mcastCfg.getTrustedInterfaces().contains("lo0"));
 
         // TcpIp Config
         final TcpIpConfig tcpCfg = netCfg.getJoin().getTcpIpConfig();
         assertEquals(true, tcpCfg.isEnabled());
         assertEquals(10, tcpCfg.getConnectionTimeoutSeconds());
+        assertFalse(tcpCfg.getMembers().isEmpty());
+        assertTrue(tcpCfg.getMembers().contains("192.168.0.1"));
+        assertTrue(tcpCfg.getMembers().contains("192.168.0.2"));
+        assertTrue(tcpCfg.getMembers().contains("192.168.0.3"));
+        assertEquals("127.0.0.1", tcpCfg.getRequiredMember());
     }
 
     // *************************************************************************
