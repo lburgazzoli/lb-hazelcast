@@ -16,33 +16,25 @@
  * limitations under the License.
  */
 
-package com.github.lburgazzoli.hazelcast.config.processors;
+package com.github.lburgazzoli.hazelcast.config.processor;
 
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
-import com.hazelcast.config.TcpIpConfig;
-
-import java.util.List;
+import com.hazelcast.config.GroupConfig;
 
 import static com.github.lburgazzoli.hazelcast.config.HzConfig.convert;
 
-public class TcpIpConfigProcessor implements HzConfigProcessor<TcpIpConfig> {
-    public static final TcpIpConfigProcessor INSTANCE = new TcpIpConfigProcessor();
+public class GroupConfigProcessor implements HzConfigProcessor<GroupConfig> {
+    public static final GroupConfigProcessor INSTANCE = new GroupConfigProcessor();
 
     @SuppressWarnings("unchecked")
     @Override
-    public TcpIpConfig apply(TcpIpConfig config, String key, Object value) {
+    public GroupConfig apply(GroupConfig config, String key, Object value) {
         switch(key) {
-            case "enabled":
-                config.setEnabled(convert(value, Boolean.class));
+            case "name":
+                config.setName(convert(value, String.class));
                 break;
-            case "connection-timeout-seconds":
-                config.setConnectionTimeoutSeconds(convert(value, Integer.class));
-                break;
-            case "required-member":
-                config.setRequiredMember(convert(value, String.class));
-                break;
-            case "members":
-                ((List<String>)value).forEach(config::addMember);
+            case "password":
+                config.setPassword(convert(value, String.class));
                 break;
         }
 

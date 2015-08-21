@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.github.lburgazzoli.hazelcast.config.processors;
+package com.github.lburgazzoli.hazelcast.config.processor;
 
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
 import com.hazelcast.config.JoinConfig;

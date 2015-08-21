@@ -18,8 +18,8 @@
 
 package com.github.lburgazzoli.hazelcast.config;
 
-import com.github.lburgazzoli.hazelcast.config.processors.GroupConfigProcessor;
-import com.github.lburgazzoli.hazelcast.config.processors.NetworkConfigProcessor;
+import com.github.lburgazzoli.hazelcast.config.processor.GroupConfigProcessor;
+import com.github.lburgazzoli.hazelcast.config.processor.NetworkConfigProcessor;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.ConfigBuilder;
 import org.slf4j.Logger;
