@@ -37,14 +37,18 @@ public class YamlConfigBuilder extends HzConfigBuilder {
         this.in = inputStream;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Config build() {
+        return build(new Config());
+    }
+
+    @SuppressWarnings("unchecked")
+    Config build(Config config) {
         try {
             Yaml yaml = new Yaml();
 
             return process(
-                new Config(),
+                config,
                 (Map<String,Object>)yaml.load(this.in)
             );
         } catch (Exception e) {

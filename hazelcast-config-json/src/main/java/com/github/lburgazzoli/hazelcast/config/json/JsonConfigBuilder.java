@@ -40,12 +40,16 @@ public class JsonConfigBuilder extends HzConfigBuilder {
         this.in = inputStream;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Config build() {
+        return build(new Config());
+    }
+
+    @SuppressWarnings("unchecked")
+    Config build(Config config) {
         try {
             return process(
-                new Config(),
+                config,
                 new ObjectMapper()
                     .registerModule(new AfterburnerModule())
                     .setSerializationInclusion(JsonInclude.Include.NON_NULL)
