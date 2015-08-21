@@ -1,7 +1,10 @@
 sudo: false
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 language:
 - java
-
 script:
 - "./gradlew clean compileJava"
 - "./gradlew :lb-hazelcast-common:uploadArchives"
