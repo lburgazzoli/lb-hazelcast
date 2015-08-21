@@ -58,7 +58,7 @@ public class YamlConfigTest {
 
         // Multicast Config
         final MulticastConfig mcastCfg = netCfg.getJoin().getMulticastConfig();
-        assertEquals(true, mcastCfg.isEnabled());
+        assertEquals(false, mcastCfg.isEnabled());
         assertEquals(false, mcastCfg.isLoopbackModeEnabled());
         assertFalse(mcastCfg.getTrustedInterfaces().isEmpty());
         assertTrue(mcastCfg.getTrustedInterfaces().contains("eth0"));
@@ -66,7 +66,7 @@ public class YamlConfigTest {
 
         // TcpIp Config
         final TcpIpConfig tcpCfg = netCfg.getJoin().getTcpIpConfig();
-        assertEquals(true, tcpCfg.isEnabled());
+        assertEquals(false, tcpCfg.isEnabled());
         assertEquals(10, tcpCfg.getConnectionTimeoutSeconds());
         assertFalse(tcpCfg.getMembers().isEmpty());
         assertTrue(tcpCfg.getMembers().contains("192.168.0.1"));

@@ -28,6 +28,7 @@ import static com.github.lburgazzoli.hazelcast.config.HzConfig.convert;
 public class TcpIpConfigProcessor implements HzConfigProcessor<TcpIpConfig> {
     public static final TcpIpConfigProcessor INSTANCE = new TcpIpConfigProcessor();
 
+    @SuppressWarnings("unchecked")
     @Override
     public TcpIpConfig apply(TcpIpConfig config, String key, Object value) {
         switch(key) {

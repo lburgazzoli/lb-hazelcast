@@ -3,12 +3,12 @@ include "hazelcast-serialization"
 include "hazelcast-serialization-json"
 include "hazelcast-serialization-fst"
 include "hazelcast-serialization-kryo"
-include "hazelcast-serialization-examples"
 include "hazelcast-spring-boot"
-include "hazelcast-spring-boot-examples"
 include "hazelcast-config"
 include "hazelcast-config-json"
 include "hazelcast-config-yaml"
+include "hazelcast-serialization-examples"
+include "hazelcast-spring-boot-examples"
 
 rootProject.children.each {
     it.name = "lb-" + it.name

@@ -13,13 +13,13 @@ network:
     - "10100"
   join:
     multicast:
-      enabled: true
+      enabled: false
       loopback-mode-enabled: false
       trusted-interfaces:
         - "eth0"
         - "eth1"
     tcp-ip:
-      enabled: true
+      enabled: false
       connection-timeout-seconds: 10
       required-member: "127.0.0.1"
       members:

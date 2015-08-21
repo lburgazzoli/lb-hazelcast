@@ -20,15 +20,13 @@ package com.github.lburgazzoli.hazelcast.config.processors;
 
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
 import com.hazelcast.config.GroupConfig;
-import com.hazelcast.config.TcpIpConfig;
-
-import java.util.List;
 
 import static com.github.lburgazzoli.hazelcast.config.HzConfig.convert;
 
 public class GroupConfigProcessor implements HzConfigProcessor<GroupConfig> {
     public static final GroupConfigProcessor INSTANCE = new GroupConfigProcessor();
 
+    @SuppressWarnings("unchecked")
     @Override
     public GroupConfig apply(GroupConfig config, String key, Object value) {
         switch(key) {

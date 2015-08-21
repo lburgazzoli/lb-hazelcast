@@ -48,6 +48,7 @@ public class HzConfig {
      * @param processor
      * @param <C>
      */
+    @SuppressWarnings("unchecked")
     public static <C> void forEachElementApply(
         final Supplier<C> configSupplier,
         final Object root,

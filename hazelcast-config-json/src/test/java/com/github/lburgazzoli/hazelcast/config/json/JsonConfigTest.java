@@ -55,7 +55,7 @@ public class JsonConfigTest {
 
         // Multicast Config
         final MulticastConfig mcastCfg = netCfg.getJoin().getMulticastConfig();
-        assertEquals(true, mcastCfg.isEnabled());
+        assertEquals(false, mcastCfg.isEnabled());
         assertEquals(false, mcastCfg.isLoopbackModeEnabled());
         assertTrue(mcastCfg.getTrustedInterfaces().contains("eth0"));
         assertTrue(mcastCfg.getTrustedInterfaces().contains("eth1"));
@@ -63,7 +63,7 @@ public class JsonConfigTest {
 
         // TcpIp Config
         final TcpIpConfig tcpCfg = netCfg.getJoin().getTcpIpConfig();
-        assertEquals(true, tcpCfg.isEnabled());
+        assertEquals(false, tcpCfg.isEnabled());
         assertEquals(10, tcpCfg.getConnectionTimeoutSeconds());
     }
 

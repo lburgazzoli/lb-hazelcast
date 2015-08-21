@@ -29,6 +29,7 @@ import static com.github.lburgazzoli.hazelcast.config.HzConfig.forEachElementApp
 public class NetworkConfigProcessor implements HzConfigProcessor<NetworkConfig> {
     public static final NetworkConfigProcessor INSTANCE = new NetworkConfigProcessor();
 
+    @SuppressWarnings("unchecked")
     @Override
     public NetworkConfig apply(NetworkConfig config, String key, Object value) {
         switch(key) {

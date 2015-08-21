@@ -28,6 +28,7 @@ import static com.github.lburgazzoli.hazelcast.config.HzConfig.convert;
 public class MulticastConfigProcessor implements HzConfigProcessor<MulticastConfig> {
     public static final MulticastConfigProcessor INSTANCE = new MulticastConfigProcessor();
 
+    @SuppressWarnings("unchecked")
     @Override
     public MulticastConfig apply(MulticastConfig config, String key, Object value) {
         switch(key) {
