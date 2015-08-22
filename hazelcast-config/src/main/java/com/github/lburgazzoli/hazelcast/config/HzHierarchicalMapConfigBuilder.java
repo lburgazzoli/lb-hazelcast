@@ -18,9 +18,6 @@
 
 package com.github.lburgazzoli.hazelcast.config;
 
-import com.github.lburgazzoli.hazelcast.config.processor.GroupConfigProcessor;
-import com.github.lburgazzoli.hazelcast.config.processor.map.MapConfigProcessor;
-import com.github.lburgazzoli.hazelcast.config.processor.network.NetworkConfigProcessor;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.ConfigBuilder;
 import com.hazelcast.config.MapConfig;
@@ -38,21 +35,21 @@ public abstract class HzHierarchicalMapConfigBuilder implements ConfigBuilder {
                         HzConfig.forEachElementApply(
                             config::getGroupConfig,
                             entry,
-                            GroupConfigProcessor.INSTANCE);
+                            HzConfigProcessors.GROUP);
                         break;
                     case HzConfig.Elements.NETWORK:
                         HzConfig.forEachElementApply(
                             config::getNetworkConfig,
                             entry,
-                            NetworkConfigProcessor.INSTANCE);
+                            HzConfigProcessors.NETWORK);
                         break;
-                    case HzConfig.Elements.MAPS:
+                    case HzConfig.Elements.MAPS + "_":
                         HzConfig.valueAsListOfMaps(entry).stream().map(
                             map ->
                                 HzConfig.forEachElementApply(
                                     MapConfig::new,
                                     map,
-                                    MapConfigProcessor.INSTANCE)
+                                    HzConfigProcessors.MAP)
                         ).forEach(config::addMapConfig);
                         break;
                 }
