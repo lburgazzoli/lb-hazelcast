@@ -22,20 +22,10 @@ import com.github.lburgazzoli.hazelcast.config.processor.GroupConfigProcessor;
 import com.github.lburgazzoli.hazelcast.config.processor.NetworkConfigProcessor;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.ConfigBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-import static com.github.lburgazzoli.hazelcast.config.HzConfig.forEachElementApply;
-
-public abstract class HzConfigBuilder implements ConfigBuilder {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(HzConfigBuilder.class);
-
-    // *************************************************************************
-    //
-    // *************************************************************************
+public abstract class HzHierarchicalMapConfigBuilder implements ConfigBuilder {
 
     @SuppressWarnings("unchecked")
     protected Config process(final Config config, Map<String,Object> root) throws Exception {
@@ -43,13 +33,13 @@ public abstract class HzConfigBuilder implements ConfigBuilder {
             entry -> {
                 switch (entry.getKey()) {
                     case HzConfig.Elements.GROUP:
-                        forEachElementApply(
+                        HzConfig.forEachElementApply(
                             config::getGroupConfig,
                             entry,
                             GroupConfigProcessor.INSTANCE);
                         break;
                     case HzConfig.Elements.NETWORK:
-                        forEachElementApply(
+                        HzConfig.forEachElementApply(
                             config::getNetworkConfig,
                             entry,
                             NetworkConfigProcessor.INSTANCE);

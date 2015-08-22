@@ -18,14 +18,14 @@
 
 package com.github.lburgazzoli.hazelcast.config.yaml;
 
-import com.github.lburgazzoli.hazelcast.config.HzConfigBuilder;
+import com.github.lburgazzoli.hazelcast.config.HzHierarchicalMapConfigBuilder;
 import com.hazelcast.config.Config;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
 import java.util.Map;
 
-public class YamlConfigBuilder extends HzConfigBuilder {
+public class YamlConfigBuilder extends HzHierarchicalMapConfigBuilder {
 
     private InputStream in;
 
