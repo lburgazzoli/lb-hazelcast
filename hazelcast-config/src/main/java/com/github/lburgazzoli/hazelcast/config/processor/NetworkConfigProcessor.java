@@ -18,12 +18,12 @@
 
 package com.github.lburgazzoli.hazelcast.config.processor;
 
+import com.github.lburgazzoli.hazelcast.config.HzConfig;
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
 import com.hazelcast.config.NetworkConfig;
 
 import java.util.List;
 
-import static com.github.lburgazzoli.hazelcast.config.HzConfig.convert;
 import static com.github.lburgazzoli.hazelcast.config.HzConfig.forEachElementApply;
 
 public class NetworkConfigProcessor implements HzConfigProcessor<NetworkConfig> {
@@ -33,26 +33,14 @@ public class NetworkConfigProcessor implements HzConfigProcessor<NetworkConfig> 
     @Override
     public NetworkConfig apply(NetworkConfig config, String key, Object value) {
         switch(key) {
-            case "reuse-address":
-                config.setReuseAddress(convert(value, Boolean.class));
-                break;
-            case "port":
-                config.setPort(convert(value, Integer.class));
-                break;
-            case "port-auto-increment":
-                config.setPortAutoIncrement(convert(value, Boolean.class));
-                break;
-            case "port-count":
-                config.setPortCount(convert(value, Integer.class));
-                break;
-            case "public-address":
-                config.setPublicAddress(convert(value, String.class));
-                break;
             case "outbound-ports":
                 ((List<String>) value).forEach(config::addOutboundPortDefinition);
                 break;
             case "join":
                 forEachElementApply(config::getJoin, value, JoinConfigProcessor.INSTANCE);
+                break;
+            default:
+                HzConfig.setPropertyValue(config, key, value);
                 break;
         }
 

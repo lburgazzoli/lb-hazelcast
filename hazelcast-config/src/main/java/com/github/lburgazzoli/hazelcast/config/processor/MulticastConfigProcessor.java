@@ -18,12 +18,11 @@
 
 package com.github.lburgazzoli.hazelcast.config.processor;
 
+import com.github.lburgazzoli.hazelcast.config.HzConfig;
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
 import com.hazelcast.config.MulticastConfig;
 
 import java.util.List;
-
-import static com.github.lburgazzoli.hazelcast.config.HzConfig.convert;
 
 public class MulticastConfigProcessor implements HzConfigProcessor<MulticastConfig> {
     public static final MulticastConfigProcessor INSTANCE = new MulticastConfigProcessor();
@@ -32,29 +31,11 @@ public class MulticastConfigProcessor implements HzConfigProcessor<MulticastConf
     @Override
     public MulticastConfig apply(MulticastConfig config, String key, Object value) {
         switch(key) {
-            case "enabled":
-                config.setEnabled(convert(value, Boolean.class));
-                break;
-            case "loopback-mode-enabled":
-                config.setLoopbackModeEnabled(convert(value, Boolean.class));
-                break;
-            case "multicast-group":
-                config.setMulticastGroup(convert(value, String.class));
-                break;
-            case "multicast-port":
-                config.setMulticastPort(convert(value, Integer.class));
-                break;
-            case "multicast-timeout-seconds":
-                config.setMulticastTimeoutSeconds(convert(value, Integer.class));
-                break;
-            case "multicast-time-to-live-seconds":
-                config.setMulticastTimeToLive(convert(value, Integer.class));
-                break;
-            case "multicast-time-to-live":
-                config.setMulticastTimeToLive(convert(value, Integer.class));
-                break;
             case "trusted-interfaces":
                 ((List<String>)value).forEach(config::addTrustedInterface);
+                break;
+            default:
+                HzConfig.setPropertyValue(config, key, value);
                 break;
         }
 

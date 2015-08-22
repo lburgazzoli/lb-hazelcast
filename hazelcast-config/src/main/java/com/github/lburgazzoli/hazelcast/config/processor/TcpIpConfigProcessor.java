@@ -18,12 +18,11 @@
 
 package com.github.lburgazzoli.hazelcast.config.processor;
 
+import com.github.lburgazzoli.hazelcast.config.HzConfig;
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
 import com.hazelcast.config.TcpIpConfig;
 
 import java.util.List;
-
-import static com.github.lburgazzoli.hazelcast.config.HzConfig.convert;
 
 public class TcpIpConfigProcessor implements HzConfigProcessor<TcpIpConfig> {
     public static final TcpIpConfigProcessor INSTANCE = new TcpIpConfigProcessor();
@@ -32,17 +31,11 @@ public class TcpIpConfigProcessor implements HzConfigProcessor<TcpIpConfig> {
     @Override
     public TcpIpConfig apply(TcpIpConfig config, String key, Object value) {
         switch(key) {
-            case "enabled":
-                config.setEnabled(convert(value, Boolean.class));
-                break;
-            case "connection-timeout-seconds":
-                config.setConnectionTimeoutSeconds(convert(value, Integer.class));
-                break;
-            case "required-member":
-                config.setRequiredMember(convert(value, String.class));
-                break;
             case "members":
                 ((List<String>)value).forEach(config::addMember);
+                break;
+            default:
+                HzConfig.setPropertyValue(config, key, value);
                 break;
         }
 

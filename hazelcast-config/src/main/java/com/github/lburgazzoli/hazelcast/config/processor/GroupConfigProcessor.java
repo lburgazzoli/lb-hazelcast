@@ -18,10 +18,9 @@
 
 package com.github.lburgazzoli.hazelcast.config.processor;
 
+import com.github.lburgazzoli.hazelcast.config.HzConfig;
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
 import com.hazelcast.config.GroupConfig;
-
-import static com.github.lburgazzoli.hazelcast.config.HzConfig.convert;
 
 public class GroupConfigProcessor implements HzConfigProcessor<GroupConfig> {
     public static final GroupConfigProcessor INSTANCE = new GroupConfigProcessor();
@@ -29,16 +28,6 @@ public class GroupConfigProcessor implements HzConfigProcessor<GroupConfig> {
     @SuppressWarnings("unchecked")
     @Override
     public GroupConfig apply(GroupConfig config, String key, Object value) {
-        //HzConfig.apply(GroupConfig.class, config, key, value);
-        switch(key) {
-            case "name":
-                config.setName(convert(value, String.class));
-                break;
-            case "password":
-                config.setPassword(convert(value, String.class));
-                break;
-        }
-
-        return config;
+        return HzConfig.setPropertyValue(config, key, value);
     }
 }

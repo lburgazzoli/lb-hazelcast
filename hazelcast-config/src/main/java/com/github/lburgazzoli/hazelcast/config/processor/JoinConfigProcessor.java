@@ -34,12 +34,14 @@ public class JoinConfigProcessor implements HzConfigProcessor<JoinConfig> {
                     config::getMulticastConfig,
                     value,
                     MulticastConfigProcessor.INSTANCE);
+                break;
 
             case "tcp-ip":
                 forEachElementApply(
                     config::getTcpIpConfig,
                     value,
                     TcpIpConfigProcessor.INSTANCE);
+                break;
         }
 
         config.verify();
