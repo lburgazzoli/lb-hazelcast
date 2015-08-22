@@ -18,13 +18,31 @@
 
 package com.github.lburgazzoli.hazelcast.config;
 
-import com.github.lburgazzoli.hazelcast.function.TriFunction;
+import com.github.lburgazzoli.hazelcast.HzUtil;
 import pl.jsolve.typeconverter.TypeConverter;
 
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class HzConfig {
+
+    public static final Function<String, String> PROPERTY_TO_METHOD =
+        (String input) -> {
+            final StringBuilder result = new StringBuilder(input);
+            for(int i = input.length() - 1; i >= 0; --i) {
+                if(input.charAt(i) == '-') {
+                    result.deleteCharAt(i);
+                    if(i < result.length()) {
+                        result.setCharAt(i, Character.toUpperCase(input.charAt(i)));
+                    }
+                }
+            }
+
+            return result.toString();
+        };
 
     /**
      *
@@ -97,6 +115,29 @@ public class HzConfig {
      */
     public static <S, T> T convert(S source, Class<T> targetClass) {
         return TypeConverter.convert(source, targetClass);
+    }
+
+    // *************************************************************************
+    //
+    // *************************************************************************
+
+    /**
+     *
+     * @param object
+     * @param propertyName
+     * @param value
+     * @param <T>
+     */
+    public static <T> void apply(T object, String propertyName, Object value) {
+        try {
+            final String methodName = PROPERTY_TO_METHOD.apply(propertyName);
+            final Method method = new PropertyDescriptor(methodName, object.getClass()).getWriteMethod();
+            final Class<?> type = method.getParameterTypes()[0];
+
+            method.invoke(object, convert(value, type));
+        } catch(Exception e) {
+            HzUtil.rethrowUnchecked(e);
+        }
     }
 
     // *************************************************************************

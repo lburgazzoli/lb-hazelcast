@@ -55,52 +55,10 @@ public class JsonConfigBuilder extends HzHierarchicalMapConfigBuilder {
                     .registerModule(new AfterburnerModule())
                     .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                    .setPropertyNamingStrategy(new LowerCaseWithDashStrategy())
                     .readValue(this.in, Map.class)
             );
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    // *************************************************************************
-    //
-    // *************************************************************************
-
-    private static class LowerCaseWithDashStrategy extends PropertyNamingStrategy.PropertyNamingStrategyBase {
-        @Override
-        public String translate(String input) {
-            if(input == null) {
-                return input;
-            } else {
-                int length = input.length();
-                int resultLength = 0;
-                boolean wasPrevTranslated = false;
-
-                final StringBuilder result = new StringBuilder(length * 2);
-
-                for(int i = 0; i < length; ++i) {
-                    char c = input.charAt(i);
-                    if(i > 0 || c != 95) {
-                        if(Character.isUpperCase(c)) {
-                            if(!wasPrevTranslated && resultLength > 0 && result.charAt(resultLength - 1) != 95) {
-                                result.append('-');
-                                ++resultLength;
-                            }
-
-                            c = Character.toLowerCase(c);
-                            wasPrevTranslated = true;
-                        } else {
-                            wasPrevTranslated = false;
-                        }
-
-                        result.append(c);
-                        ++resultLength;
-                    }
-                }
-
-                return resultLength > 0 ? result.toString() : input;
-            }
         }
     }
 }
