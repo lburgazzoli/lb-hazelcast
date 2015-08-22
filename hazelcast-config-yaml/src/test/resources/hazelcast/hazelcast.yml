@@ -26,3 +26,27 @@ network:
         - "192.168.0.1"
         - "192.168.0.2"
         - "192.168.0.3"
+  interfaces:
+    enabled: false
+    addresses:
+     - "10.3.16.*"
+     - "10.3.10.4-18"
+     - "192.168.1.3"
+maps:
+  - name: "map-1"
+    in-memory-format: "BINARY"
+    max-size:
+      policy: "PER_NODE"
+      value: 5000
+    indexes:
+      - name: "id"
+        ordered: true
+      - name: "name"
+        ordered: false
+    map-store:
+      class-name: com.hazelcast.examples.MyMapStore
+      write-delay-seconds: 60
+    entry-listeners:
+      - class-name: com.hazelcast.examples.EntryListener
+        include-value: true
+        local: false

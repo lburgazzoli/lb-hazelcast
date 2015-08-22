@@ -19,6 +19,7 @@
 package com.github.lburgazzoli.hazelcast.config.yaml;
 
 import com.hazelcast.config.Config;
+import com.hazelcast.config.InterfacesConfig;
 import com.hazelcast.config.MulticastConfig;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.config.TcpIpConfig;
@@ -52,6 +53,7 @@ public class YamlConfigTest {
         assertEquals(false, netCfg.isPortAutoIncrement());
         assertEquals(100, netCfg.getPortCount());
         assertFalse(netCfg.getOutboundPortDefinitions().isEmpty());
+        assertEquals(2, netCfg.getOutboundPortDefinitions().size());
         assertTrue(netCfg.getOutboundPortDefinitions().contains("10100"));
         assertTrue(netCfg.getOutboundPortDefinitions().contains("9000-10000"));
         assertEquals("127.0.0.1", netCfg.getPublicAddress());
@@ -61,6 +63,7 @@ public class YamlConfigTest {
         assertEquals(false, mcastCfg.isEnabled());
         assertEquals(false, mcastCfg.isLoopbackModeEnabled());
         assertFalse(mcastCfg.getTrustedInterfaces().isEmpty());
+        assertEquals(2, mcastCfg.getTrustedInterfaces().size());
         assertTrue(mcastCfg.getTrustedInterfaces().contains("eth0"));
         assertTrue(mcastCfg.getTrustedInterfaces().contains("eth1"));
 
@@ -69,10 +72,19 @@ public class YamlConfigTest {
         assertEquals(false, tcpCfg.isEnabled());
         assertEquals(10, tcpCfg.getConnectionTimeoutSeconds());
         assertFalse(tcpCfg.getMembers().isEmpty());
+        assertEquals(3, tcpCfg.getMembers().size());
         assertTrue(tcpCfg.getMembers().contains("192.168.0.1"));
         assertTrue(tcpCfg.getMembers().contains("192.168.0.2"));
         assertTrue(tcpCfg.getMembers().contains("192.168.0.3"));
         assertEquals("127.0.0.1", tcpCfg.getRequiredMember());
+
+        // Interfaces Config
+        final InterfacesConfig ifacesCfg = netCfg.getInterfaces();
+        assertEquals(false, ifacesCfg.isEnabled());
+        assertEquals(3, ifacesCfg.getInterfaces().size());
+        assertTrue(ifacesCfg.getInterfaces().contains("10.3.16.*"));
+        assertTrue(ifacesCfg.getInterfaces().contains("10.3.10.4-18"));
+        assertTrue(ifacesCfg.getInterfaces().contains("192.168.1.3"));
     }
 
     // *************************************************************************

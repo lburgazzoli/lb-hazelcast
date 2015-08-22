@@ -16,23 +16,24 @@
  * limitations under the License.
  */
 
-package com.github.lburgazzoli.hazelcast.config.processor;
+package com.github.lburgazzoli.hazelcast.config.processor.network;
 
 import com.github.lburgazzoli.hazelcast.config.HzConfig;
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
-import com.hazelcast.config.MulticastConfig;
+import com.hazelcast.config.InterfacesConfig;
 
 import java.util.List;
 
-public class MulticastConfigProcessor implements HzConfigProcessor<MulticastConfig> {
-    public static final MulticastConfigProcessor INSTANCE = new MulticastConfigProcessor();
+public class InterfacesConfigProcessor implements HzConfigProcessor<InterfacesConfig> {
+
+    public static final InterfacesConfigProcessor INSTANCE = new InterfacesConfigProcessor();
 
     @SuppressWarnings("unchecked")
     @Override
-    public MulticastConfig apply(MulticastConfig config, String key, Object value) {
+    public InterfacesConfig apply(InterfacesConfig config, String key, Object value) {
         switch(key) {
-            case "trusted-interfaces":
-                ((List<String>)value).forEach(config::addTrustedInterface);
+            case "addresses":
+                ((List<String>)value).forEach(config::addInterface);
                 break;
             default:
                 HzConfig.setPropertyValue(config, key, value);

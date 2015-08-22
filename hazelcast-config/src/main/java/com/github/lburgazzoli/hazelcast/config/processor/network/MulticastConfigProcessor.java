@@ -16,35 +16,30 @@
  * limitations under the License.
  */
 
-package com.github.lburgazzoli.hazelcast.config.processor;
+package com.github.lburgazzoli.hazelcast.config.processor.network;
 
+import com.github.lburgazzoli.hazelcast.config.HzConfig;
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
-import com.hazelcast.config.JoinConfig;
+import com.hazelcast.config.MulticastConfig;
 
-import static com.github.lburgazzoli.hazelcast.config.HzConfig.forEachElementApply;
+import java.util.List;
 
-public class JoinConfigProcessor implements HzConfigProcessor<JoinConfig> {
-    public static final JoinConfigProcessor INSTANCE = new JoinConfigProcessor();
+public class MulticastConfigProcessor implements HzConfigProcessor<MulticastConfig> {
 
+    public static final MulticastConfigProcessor INSTANCE = new MulticastConfigProcessor();
+
+    @SuppressWarnings("unchecked")
     @Override
-    public JoinConfig apply(JoinConfig config, String key, Object value) {
+    public MulticastConfig apply(MulticastConfig config, String key, Object value) {
         switch(key) {
-            case "multicast":
-                forEachElementApply(
-                    config::getMulticastConfig,
-                    value,
-                    MulticastConfigProcessor.INSTANCE);
+            case "trusted-interfaces":
+                ((List<String>)value).forEach(config::addTrustedInterface);
                 break;
-
-            case "tcp-ip":
-                forEachElementApply(
-                    config::getTcpIpConfig,
-                    value,
-                    TcpIpConfigProcessor.INSTANCE);
+            default:
+                HzConfig.setPropertyValue(config, key, value);
                 break;
         }
 
-        config.verify();
         return config;
     }
 }

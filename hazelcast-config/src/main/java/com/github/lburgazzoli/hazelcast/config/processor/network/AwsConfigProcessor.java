@@ -16,24 +16,21 @@
  * limitations under the License.
  */
 
-package com.github.lburgazzoli.hazelcast.config.processor;
+package com.github.lburgazzoli.hazelcast.config.processor.network;
 
 import com.github.lburgazzoli.hazelcast.config.HzConfig;
 import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
-import com.hazelcast.config.TcpIpConfig;
+import com.hazelcast.config.AwsConfig;
 
-import java.util.List;
 
-public class TcpIpConfigProcessor implements HzConfigProcessor<TcpIpConfig> {
-    public static final TcpIpConfigProcessor INSTANCE = new TcpIpConfigProcessor();
+public class AwsConfigProcessor implements HzConfigProcessor<AwsConfig> {
+
+    public static final AwsConfigProcessor INSTANCE = new AwsConfigProcessor();
 
     @SuppressWarnings("unchecked")
     @Override
-    public TcpIpConfig apply(TcpIpConfig config, String key, Object value) {
+    public AwsConfig apply(AwsConfig config, String key, Object value) {
         switch(key) {
-            case "members":
-                ((List<String>)value).forEach(config::addMember);
-                break;
             default:
                 HzConfig.setPropertyValue(config, key, value);
                 break;

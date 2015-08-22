@@ -19,20 +19,21 @@
 package com.github.lburgazzoli.hazelcast.config;
 
 import com.github.lburgazzoli.hazelcast.HzUtil;
+import javaslang.Function2;
 import org.reflections.ReflectionUtils;
 import pl.jsolve.typeconverter.TypeConverter;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 public class HzConfig {
 
-    public static final BiFunction<String, String, String> PROPERTY_TO_METHOD_NAME =
+    public static final Function2<String, String, String> PROPERTY_TO_METHOD_NAME =
         (String prefix, String input) -> {
             final StringBuilder methodName = new StringBuilder(input);
             for(int i = methodName.length() - 1; i >= 0; --i) {
@@ -59,12 +60,12 @@ public class HzConfig {
      * @param processor
      * @param <C>
      */
-    public static <C> void forEachElementApply(
+    public static <C> C forEachElementApply(
         final Supplier<C> configSupplier,
         final Map.Entry<String, Object> root,
         final HzConfigProcessor<C> processor) {
 
-        forEachElementApply(configSupplier, root.getValue(), processor);
+        return forEachElementApply(configSupplier, root.getValue(), processor);
     }
 
     /**
@@ -75,7 +76,7 @@ public class HzConfig {
      * @param <C>
      */
     @SuppressWarnings("unchecked")
-    public static <C> void forEachElementApply(
+    public static <C> C forEachElementApply(
         final Supplier<C> configSupplier,
         final Object root,
         final HzConfigProcessor<C> processor) {
@@ -88,7 +89,7 @@ public class HzConfig {
             throw new IllegalArgumentException("Root node is not a map (" + root.getClass() + ")");
         }
 
-        forEachElementApply(configSupplier, (Map<String, Object>) root, processor);
+        return forEachElementApply(configSupplier, (Map<String, Object>) root, processor);
     }
 
     /**
@@ -98,7 +99,7 @@ public class HzConfig {
      * @param processor
      * @param <C>
      */
-    public static <C> void forEachElementApply(
+    public static <C> C forEachElementApply(
             final Supplier<C> configSupplier,
             final Map<String, Object> root,
             final HzConfigProcessor<C> processor) {
@@ -111,6 +112,8 @@ public class HzConfig {
                 }
             }
         );
+
+        return config;
     }
 
     /**
@@ -125,6 +128,15 @@ public class HzConfig {
         return TypeConverter.convert(source, targetClass);
     }
 
+    /**
+     *
+     * @param entry
+     * @return
+     */
+    public static List<Map<String, Object>> valueAsListOfMaps(Map.Entry<String, Object> entry) {
+        return (List<Map<String, Object>>)entry.getValue();
+    }
+
     // *************************************************************************
     //
     // *************************************************************************
@@ -136,6 +148,7 @@ public class HzConfig {
      * @param <T>
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static <T> Optional<Method> findMethodForProperty(T object, String propertyName) {
         final Set<Method> methods = ReflectionUtils.getMethods(
             object.getClass(),
@@ -196,7 +209,7 @@ public class HzConfig {
         public static final String PARTITION_GROUP      = "partition-group";
         public static final String EXECUTOR_SERVICE     = "executor-service";
         public static final String QUEUE                = "queue";
-        public static final String MAP                  = "map";
+        public static final String MAPS                 = "maps";
         public static final String CACHE                = "cache";
         public static final String MULTIMAP             = "multimap";
         public static final String REPLICATED_MAP       = "replicatedmap";

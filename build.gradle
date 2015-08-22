@@ -69,7 +69,8 @@ subprojects {
             dns                : '3.0.1',
             typeconverter      : '1.0.1',
             snakeyaml          : '1.16',
-            reflections        : '0.9.10'
+            reflections        : '0.9.10',
+            javaslang          : '1.2.2'
         ]
     }
 
@@ -117,12 +118,13 @@ subprojects {
         compile "org.apache.logging.log4j:log4j-slf4j-impl:$versions.log4j2"
 
         compile "com.google.guava:guava:$versions.guava"
-        compile "commons-io:commons-io:$versions.commonsIO"
-        compile "org.apache.commons:commons-pool2:$versions.commonsPool"
+        //compile "commons-io:commons-io:$versions.commonsIO"
+        //compile "org.apache.commons:commons-pool2:$versions.commonsPool"
         compile "org.apache.commons:commons-lang3:$versions.commonsLang"
         compile "org.apache.commons:commons-collections4:$versions.commonsCollections"
-        compile "com.goldmansachs:gs-collections:$versions.gsCollections"
+        //compile "com.goldmansachs:gs-collections:$versions.gsCollections"
         compile "org.reflections:reflections:$versions.reflections"
+        compile "com.javaslang:javaslang:$versions.javaslang"
 
         compile "org.codehaus.groovy:groovy-all:$versions.groovy"
         compile "com.hazelcast:hazelcast-all:$versions.hazelcast"

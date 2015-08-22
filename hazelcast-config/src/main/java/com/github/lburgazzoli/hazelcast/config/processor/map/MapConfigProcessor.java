@@ -16,10 +16,25 @@
  * limitations under the License.
  */
 
-package com.github.lburgazzoli.hazelcast.config;
+package com.github.lburgazzoli.hazelcast.config.processor.map;
 
-import javaslang.Function3;
+import com.github.lburgazzoli.hazelcast.config.HzConfig;
+import com.github.lburgazzoli.hazelcast.config.HzConfigProcessor;
+import com.hazelcast.config.MapConfig;
 
-@FunctionalInterface
-public interface HzConfigProcessor<T> extends Function3<T , String, Object, T> {
+
+public class MapConfigProcessor implements HzConfigProcessor<MapConfig> {
+
+    public static final MapConfigProcessor INSTANCE = new MapConfigProcessor();
+
+    @Override
+    public MapConfig apply(MapConfig config, String key, Object value) {
+        switch(key) {
+            default:
+                HzConfig.setPropertyValue(config, key, value);
+                break;
+        }
+
+        return config;
+    }
 }
