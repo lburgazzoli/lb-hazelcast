@@ -128,16 +128,19 @@ public class HzConfig {
      * @param value
      * @param <T>
      */
-    public static <T> void apply(T object, String propertyName, Object value) {
+    public static <T> T apply(T object, String propertyName, Object value) {
         try {
             final String methodName = PROPERTY_TO_METHOD.apply(propertyName);
-            final Method method = new PropertyDescriptor(methodName, object.getClass()).getWriteMethod();
-            final Class<?> type = method.getParameterTypes()[0];
+            final PropertyDescriptor methodDescr = new PropertyDescriptor(methodName, object.getClass());
+            final Method method = methodDescr.getWriteMethod();
+            final Class<?> argumentType = method.getParameterTypes()[0];
 
-            method.invoke(object, convert(value, type));
+            method.invoke(object, convert(value, argumentType));
         } catch(Exception e) {
             HzUtil.rethrowUnchecked(e);
         }
+
+        return object;
     }
 
     // *************************************************************************

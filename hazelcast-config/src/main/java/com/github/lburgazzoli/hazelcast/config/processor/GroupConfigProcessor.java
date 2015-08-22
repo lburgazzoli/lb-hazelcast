@@ -29,6 +29,7 @@ public class GroupConfigProcessor implements HzConfigProcessor<GroupConfig> {
     @SuppressWarnings("unchecked")
     @Override
     public GroupConfig apply(GroupConfig config, String key, Object value) {
+        //HzConfig.apply(GroupConfig.class, config, key, value);
         switch(key) {
             case "name":
                 config.setName(convert(value, String.class));
