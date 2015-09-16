@@ -33,7 +33,7 @@ subprojects {
     group   = 'com.github.lburgazzoli'
 
     ext {
-        gradleVersion   = '2.6'
+        gradleVersion   = '2.7'
         gradleScriptDir = "${rootProject.projectDir}/gradle"
 
         if(!project.hasProperty('nexusUsername') && !project.hasProperty('nexusPassword')) {
@@ -206,6 +206,6 @@ subprojects {
 //
 // *****************************************************************************
 
-task wrapper(type: Wrapper) {
-    gradleVersion = "$gradleVersion"
+wrapper {
+    version = "$gradleVersion"
 }
