@@ -5,10 +5,6 @@ addons:
       - oracle-java8-installer
 language:
 - java
-before_install:
-- ./hazelcast-discovery-etcd/src/main/bash/etcd_travis_install.sh
-- ./hazelcast-discovery-etcd/src/main/bash/etcd_travis_run.sh
-
 script:
 - ./gradlew clean compileJava
 - ./gradlew :lb-hazelcast-common:uploadArchives
@@ -19,8 +15,6 @@ script:
 - ./gradlew :lb-hazelcast-serialization-fst:uploadArchives
 - ./gradlew :lb-hazelcast-serialization-json:uploadArchives
 - ./gradlew :lb-hazelcast-serialization-kryo:uploadArchives
-- ./gradlew :lb-hazelcast-discovery-dns:uploadArchives
-- ./gradlew :lb-hazelcast-discovery-etcd:uploadArchives
 
 jdk:
 - oraclejdk8
