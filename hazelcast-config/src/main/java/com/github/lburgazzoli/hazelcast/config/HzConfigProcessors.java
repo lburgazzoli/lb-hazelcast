@@ -45,6 +45,7 @@ public class HzConfigProcessors {
     // Network
     // *************************************************************************
 
+    @SuppressWarnings("unchecked")
     static final HzConfigProcessor<NetworkConfig> NETWORK =
         (NetworkConfig config, String key, Object value) -> {
             switch(key) {
@@ -92,6 +93,7 @@ public class HzConfigProcessors {
             return config;
         };
 
+    @SuppressWarnings("unchecked")
     static final HzConfigProcessor<MulticastConfig> MULTICAST =
         (MulticastConfig config, String key, Object value) -> {
             switch(key) {
@@ -106,6 +108,7 @@ public class HzConfigProcessors {
             return config;
         };
 
+    @SuppressWarnings("unchecked")
     static final HzConfigProcessor<TcpIpConfig> TCPIP =
         (TcpIpConfig config, String key, Object value) -> {
             switch(key) {
@@ -131,6 +134,7 @@ public class HzConfigProcessors {
             return config;
         };
 
+    @SuppressWarnings("unchecked")
     static final HzConfigProcessor<InterfacesConfig> INTERFACES =
         (InterfacesConfig config, String key, Object value) -> {
             switch(key) {

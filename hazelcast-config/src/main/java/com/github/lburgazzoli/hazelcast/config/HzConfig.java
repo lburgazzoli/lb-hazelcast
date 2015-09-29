@@ -133,6 +133,7 @@ public class HzConfig {
      * @param entry
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> valueAsListOfMaps(Map.Entry<String, Object> entry) {
         return (List<Map<String, Object>>)entry.getValue();
     }

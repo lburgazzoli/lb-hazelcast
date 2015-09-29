@@ -24,8 +24,6 @@ import com.hazelcast.quorum.QuorumService;
 import com.hazelcast.ringbuffer.Ringbuffer;
 import com.hazelcast.transaction.*;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentMap;
@@ -40,8 +38,9 @@ public class HzPrefixedInstance implements HazelcastInstance {
      * @param instance the Hazelcast instance
      */
     public HzPrefixedInstance(final HazelcastInstance instance) {
-        this(instance,null);
+        this(instance, null);
     }
+
     /**
      * c-tor
      *
@@ -69,7 +68,7 @@ public class HzPrefixedInstance implements HazelcastInstance {
      * @param prefix    the object prefix
      */
     public HzPrefixedInstance(final Config config, String prefix) {
-        this(Hazelcast.newHazelcastInstance(config),prefix);
+        this(Hazelcast.newHazelcastInstance(config), prefix);
     }
 
     // *************************************************************************
@@ -82,7 +81,7 @@ public class HzPrefixedInstance implements HazelcastInstance {
      * @return the prefix
      */
     public String getPrefix(String name) {
-        return StringUtils.isEmpty(prefix)
+        return StringUtils.isBlank(prefix)
             ? name
             : prefix + ":" + name;
     }
@@ -139,12 +138,6 @@ public class HzPrefixedInstance implements HazelcastInstance {
     @Override
     public ILock getLock(String name) {
         return instance.getLock(getPrefix(name));
-    }
-
-    @Deprecated
-    @Override
-    public ILock getLock(Object key) {
-        return instance.getLock(key);
     }
 
     @Override
@@ -260,12 +253,6 @@ public class HzPrefixedInstance implements HazelcastInstance {
     @Override
     public LifecycleService getLifecycleService() {
         return instance.getLifecycleService();
-    }
-
-    @Deprecated
-    @Override
-    public <T extends DistributedObject> T getDistributedObject(String serviceName, Object id) {
-        return instance.getDistributedObject(serviceName, id);
     }
 
     @Override

@@ -28,6 +28,7 @@ project.ext {
 dependencies {
     compile project(':lb-hazelcast-common')
     compile "pl.jsolve:typeconverter:$versions.typeconverter"
+    compile "org.reflections:reflections:$versions.reflections"
 }
 
 jar {
