@@ -132,7 +132,7 @@ subprojects {
     }
 
     compileGroovy {
-        groovyOptions.configurationScript = file("$rootProject/gradle/groovy-config.groovy")
+        groovyOptions.configurationScript = file("${rootProject.projectDir}/gradle/groovy-config.groovy")
         groovyOptions.optimizationOptions.indy = true
     }
 
