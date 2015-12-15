@@ -12,7 +12,7 @@ buildscript {
     dependencies {
         classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.0.RELEASE'
     }
 }
 
@@ -25,6 +25,13 @@ allprojects {
         resolutionStrategy.componentSelection.all {
             selection ->
                 switch(selection.candidate.group) {
+                    case 'com.fasterxml.jackson.core':
+                    case 'com.fasterxml.jackson.dataformat':
+                    case 'com.fasterxml.jackson.module':
+                        if(selection.candidate.version.contains('-rc')) {
+                            selection.reject('does-not-exist')
+                        }
+                        break
                     case 'commons-logging':
                         if(selection.candidate.version.contains('99.0-does-not-exist')) {
                             selection.reject('does-not-exist')
@@ -35,9 +42,20 @@ allprojects {
                             selection.reject('Release candidate')
                         }
                         break
+                    case 'com.javaslang':
+                        if(selection.candidate.version.contains('-RC')) {
+                            selection.reject('Release candidate')
+                        }
+                        if(selection.candidate.version.contains('-beta')) {
+                            selection.reject('Beta')
+                        }
+                        break
                     case 'org.springframework.boot':
                         if(selection.candidate.version.contains('.M')) {
                             selection.reject('Milestone')
+                        }
+                        if(selection.candidate.version.contains('.RC')) {
+                            selection.reject('Release candidate')
                         }
                         break
                 }
@@ -68,24 +86,24 @@ subprojects {
 
         ext {
             versions = [
-                slf4j              : '1.7.12',
-                log4j2             : '2.4',
-                jackson            : '2.6.2',
-                jacksonSmile       : '2.6.2',
-                hazelcast          : '3.6-SNAPSHOT',
-                guava              : '18.0',
+                slf4j              : '1.7.13',
+                log4j2             : '2.5',
+                jackson            : '2.6.4',
+                jacksonSmile       : '2.6.4',
+                hazelcast          : '3.6-EA2',
+                guava              : '19.0',
                 commonsLang        : '3.4',
-                commonsCollections : '4.0',
+                commonsCollections : '4.1',
                 commonsPool        : '2.4.2',
                 commonsIO          : '2.4',
-                springBoot         : '1.2.6.RELEASE',
+                springBoot         : '1.3.0.RELEASE',
                 junit              : '4.12',
                 kryo               : '3.0.3',
                 disruptor          : '3.3.0',
-                gsCollections      : '6.2.0',
+                gsCollections      : '7.0.0',
                 groovy             : '2.4.5',
                 jsonpath           : '1.2',
-                fst                : '2.40',
+                fst                : '2.43',
                 retrofit           : '1.9.0',
                 dns                : '3.0.1',
                 typeconverter      : '1.0.1',
@@ -111,6 +129,11 @@ subprojects {
 
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+
+    compileGroovy {
+        groovyOptions.configurationScript = file("$rootProject/gradle/groovy-config.groovy")
+        groovyOptions.optimizationOptions.indy = true
     }
 
     // *************************************************************************
@@ -226,9 +249,5 @@ subprojects {
 
     dependencyUpdates {
         revision = 'release'
-    }
-
-    tasks.withType(GroovyCompile) {
-        groovyOptions.optimizationOptions.indy = true
     }
 }
