@@ -33,6 +33,7 @@ public class Activator implements BundleActivator, Runnable {
     private CachingProvider provider;
     private CacheManager manager;
     private Cache<String, Bean> cache;
+    private ClassLoader jcl;
 
     public Activator() {
         this.scheduler = Executors.newScheduledThreadPool(1);
@@ -44,11 +45,11 @@ public class Activator implements BundleActivator, Runnable {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        ClassLoader jcl = findClassLoader(context);
+        this.jcl = findClassLoader(context);
         ClassLoader ccl = Thread.currentThread().getContextClassLoader();
 
         try {
-            //Thread.currentThread().setContextClassLoader(jcl);
+            Thread.currentThread().setContextClassLoader(jcl);
 
             this.provider = Caching.getCachingProvider(PROVIDER_CLASS, jcl);
             this.manager  = provider.getCacheManager(null, jcl, null);
@@ -60,7 +61,7 @@ public class Activator implements BundleActivator, Runnable {
                     .setManagementEnabled(false)
             );
         } finally {
-            //Thread.currentThread().setContextClassLoader(ccl);
+            Thread.currentThread().setContextClassLoader(ccl);
         }
 
         this.scheduler.scheduleAtFixedRate(this, 5, 1, TimeUnit.SECONDS);
@@ -79,11 +80,18 @@ public class Activator implements BundleActivator, Runnable {
     public void run() {
         LOGGER.info("Cache {}", cache);
         if (cache != null) {
-            Bean b = new Bean(UUID.randomUUID().toString());
+            ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+            try {
+                Thread.currentThread().setContextClassLoader(jcl);
+                Bean b = new Bean(UUID.randomUUID().toString());
 
-            LOGGER.info("Put {}", b);
-            cache.put("myBean", b);
-            LOGGER.info("Get {}", cache.get("myBean"));
+                LOGGER.info("Put {}", b);
+                cache.put("myBean", b);
+                LOGGER.info("Put done", b);
+                LOGGER.info("Get {}", cache.get("myBean"));
+            }finally {
+                Thread.currentThread().setContextClassLoader(ccl);
+            }
         }
     }
 
@@ -134,7 +142,15 @@ public class Activator implements BundleActivator, Runnable {
     public static class Bean implements Serializable {
         private String data;
 
+        public Bean() {
+            this.data = null;
+        }
+
         public Bean(String data) {
+            this.data = data;
+        }
+
+        public void setData(String data) {
             this.data = data;
         }
 
