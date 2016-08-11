@@ -10,6 +10,7 @@ include "hazelcast-serialization-examples"
 include "hazelcast-spring-boot"
 include "hazelcast-spring-boot-examples"
 include "hazelcast-spring-boot-examples"
+include "hazelcast-osgi-examples"
 
 rootProject.children.each {
     it.name = "lb-" + it.name
