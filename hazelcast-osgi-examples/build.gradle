@@ -18,5 +18,14 @@ jar {
         instruction 'Import-Package'   , bundleImportPackages.join(',')
         instruction 'Export-Package'   , bundleExportPackages.join(',')
         instruction 'Bundle-Activator' , 'com.github.lburgazzoli.hazelcast.osgi.examples.Activator'
+
+        instruction 'Require-Capability',
+            'osgi.extender;'
+                + 'resolution:=optional;'
+                + 'filter:="(osgi.extender=osgi.serviceloader.registrar)",' +
+            'osgi.serviceloader;'
+                + 'resolution:=optional;'
+                + 'filter:="(osgi.serviceloader=javax.cache.spi.CachingProvider)";'
+                + 'cardinality:=multiple'
     }
 }
